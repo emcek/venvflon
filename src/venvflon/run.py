@@ -23,8 +23,7 @@ class Gui(tk.Frame):
         frame = tk.Frame(master=self.master, relief=tk.GROOVE, borderwidth=2)
         frame.grid(row=0, column=0, padx=2, pady=2, rowspan=len(self.venv_list))
         for i, text in enumerate(self.venv_list):
-            rb_venvs = tk.Radiobutton(master=frame, text=str(text), variable=self.venv, value=text,
-                                         command=self.key_selected)
+            rb_venvs = tk.Radiobutton(master=frame, text=str(text), variable=self.venv, value=text, command=self.key_selected)
             rb_venvs.grid(row=i, column=0, pady=0, padx=2, sticky=tk.W)
         status = tk.Label(master=self.master, textvariable=self.status_txt)
         status.grid(row=len(self.venv_list) + 1, column=0, sticky=tk.W)
