@@ -55,7 +55,7 @@ def venv_list_in(current_path: Path, max_depth: int = 1) -> Sequence[Path]:
     result = []
     for dirpath, dirnames, _ in walk(current_path, topdown=True):
         for dirname in dirnames:
-            if '.venv' in dirname:
+            if '.venv_' in dirname:
                 result.append(Path(dirpath) / dirname)
         if dirpath.count(sep) - str(current_path).count(sep) == max_depth - 1:
             del dirnames[:]
