@@ -23,9 +23,9 @@ class Gui(tk.Frame):
         frame = tk.Frame(master=self.master, relief=tk.GROOVE, borderwidth=2)
         frame.grid(row=0, column=0, padx=2, pady=2, rowspan=len(self.venv_list))
         for i, text in enumerate(self.venv_list):
-            rb_lcd_type = tk.Radiobutton(master=frame, text=str(text), variable=self.venv, value=text,
+            rb_venvs = tk.Radiobutton(master=frame, text=str(text), variable=self.venv, value=text,
                                          command=self.key_selected)
-            rb_lcd_type.grid(row=i, column=0, pady=0, padx=2, sticky=tk.W)
+            rb_venvs.grid(row=i, column=0, pady=0, padx=2, sticky=tk.W)
         status = tk.Label(master=self.master, textvariable=self.status_txt)
         status.grid(row=len(self.venv_list) + 1, column=0, sticky=tk.W)
 
@@ -45,12 +45,11 @@ class Gui(tk.Frame):
 
 if __name__ == '__main__':
     root_tk = tk.Tk()
-    width, height = 200, 120
-    root_tk.title('KeySwitcher')
+    width, height = 250, 120
+    root_tk.title('venvflon')
     root_tk.geometry(f'{width}x{height}')
     root_tk.minsize(width=width, height=height)
     here = path.abspath(path.dirname(__file__))
-    # root_tk.iconphoto(False, tk.PhotoImage(file='/usr/share/icons/hicolor/48x48/status/key-single.png'))
-    # root_tk.iconphoto(False, tk.PhotoImage(file='/usr/share/icons/BeautyLine/apps/scalable/1password.svg'))
+    root_tk.iconphoto(False, tk.PhotoImage(file='img/cannula_64.png'))
     gui = Gui(master=root_tk)
     gui.mainloop()
