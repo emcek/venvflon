@@ -23,6 +23,7 @@ class Gui(tk.Frame):
         self.cwd_entry.set(str(self.cwd))
         self.venv_list = venv_list_in(current_path=self.cwd)
         self.init_widgets()
+        self.update_status()
 
     def init_widgets(self) -> None:
         self.master.columnconfigure(index=0, weight=1)
@@ -42,7 +43,7 @@ class Gui(tk.Frame):
             rb_venvs = tk.Radiobutton(master=frame, text=str(text), variable=self.venv, value=text, command=self.venv_selected)
             rb_venvs.grid(row=i, column=1, pady=0, padx=2, sticky=tk.W)
         status = tk.Label(master=self.master, textvariable=self.status_txt)
-        status.grid(row=len(self.venv_list) + 1, column=0, columnspan=2, sticky=tk.W + tk.E + tk.S)
+        status.grid(row=len(self.venv_list) + 1, column=0, columnspan=2, sticky=tk.E + tk.S)
 
     def refresh_cwd(self, *args):
         self.venv_list = venv_list_in(current_path=self.cwd)
@@ -56,10 +57,8 @@ class Gui(tk.Frame):
         self.update_status()
 
     def update_status(self):
-        print(Path(getcwd()).parents[1] / '.venv313' / 'Scripts')
-        out = get_command_output(cmd=['python', '-V'], cwd=Path(getcwd()).parents[1] / '.venv' / 'Scripts')
-        print(out)
-        self.status_txt.set(out[2].strip())
+        out = get_command_output(cmd=['python', '-V'])
+        self.status_txt.set(f'Current: {out[2].strip()}')
 
 
 if __name__ == '__main__':
