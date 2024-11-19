@@ -1,0 +1,126 @@
+[build-system]
+requires = ['setuptools']
+build-backend = 'setuptools.build_meta'
+
+[project]
+name = 'venvflon'
+authors = [{name = 'Michal Plichta'}]
+maintainers = [{name = 'Michal Plichta'}]
+description = 'simple virtual environment switcher'
+license = {text = 'MIT License'}
+requires-python = '>=3.9'
+readme = 'README.md'
+classifiers = [
+    'Development Status :: 4 - Beta',
+    'Environment :: Console',
+    'Environment :: Win32 (MS Windows)',
+    'License :: OSI Approved :: MIT License',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3.12',
+    'Programming Language :: Python :: 3.13',
+    'Operating System :: Microsoft :: Windows',
+    'Operating System :: Microsoft :: Windows :: Windows 10',
+    'Operating System :: Microsoft :: Windows :: Windows 11',
+    'Topic :: Utilities',
+]
+keywords = [
+    'venv', 'uv', 'virtualenv',
+]
+dynamic = ['version']
+
+[project.urls]
+Homepage = 'https://github.com/emcek/venvflon'
+Source = 'https://github.com/emcek/venvflon.git'
+Changelog = 'https://github.com/emcek/venvflon/blob/master/CHANGELOG.md'
+
+[project.scripts]
+flon_cli = 'venvflon.run:run'
+
+[project.gui-scripts]
+flon = 'venvflon.run:run'
+
+[project.optional-dependencies]
+test = [
+    'interrogate==1.7.0',
+    'isort==5.13.2',
+    'lxml==5.3.0',
+    'mypy==1.13.0',
+    'pip-audit==2.7.3',
+    'pytest==8.3.3',
+    'pytest-randomly==3.16.0',
+    'ruff==0.7.3',
+]
+
+[tool.setuptools.dynamic]
+version = {attr = 'venvflon.run.__version__'}
+
+[tool.setuptools.packages.find]
+where = ['src/']
+include = ['venvflon*']
+exclude = ['venvflon.tests*']
+
+[tool.setuptools.package-data]
+venvflon = [
+    'img/*',
+    'py.typed',
+]
+
+[tool.pytest.ini_options]
+addopts = ['-q']
+pythonpath = ['src']
+testpaths = ['tests']
+markers = [
+    'slow: marks tests as slow',
+]
+
+[tool.interrogate]
+ignore-init-method = false
+ignore-init-module = true
+ignore-magic = true
+ignore-semiprivate = false
+ignore-private = false
+ignore-property-decorators = false
+ignore-module = true
+ignore-nested-functions = false
+ignore-nested-classes = true
+ignore-setters = false
+fail-under = 90
+verbose = 1
+quiet = false
+exclude = ['tests/test_*']
+
+[tool.ruff]
+line-length = 160
+lint.select = ['E', 'F', 'C90', 'D', 'RUF']
+lint.ignore = ['D100', 'D101','D104', 'D105', 'D203', 'D204', 'D212', 'RUF001', 'RUF010']
+extend-exclude = [
+    'tests/',
+]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 5
+
+[tool.mypy]
+#ignore_missing_imports = true
+#no_warn_no_return = true
+#check_untyped_defs = true
+html_report = 'mypyhtml'
+exclude = [
+    'tests/',
+]
+
+[[tool.mypy.overrides]]
+follow_imports = 'skip'
+
+[tool.isort]
+line_length = 160
+
+[tool.uv]
+dev-dependencies = [
+    'venvflon[test]',
+    'build',
+    'detect-test-pollution',
+    'pre-commit',
+]
