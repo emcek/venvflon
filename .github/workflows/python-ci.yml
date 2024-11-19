@@ -1,0 +1,14 @@
+name: Python CI
+
+on:
+  push:
+    branches: ["*"]
+    tags-ignore: ["v*"]
+
+jobs:
+  style:
+    uses: ./.github/workflows/style.yml
+
+  test:
+    needs: [style]
+    uses: ./.github/workflows/test.yml
