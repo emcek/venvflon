@@ -27,6 +27,7 @@ repos:
     hooks:
       - id: mypy
         exclude: 'tests/|generate_ver_file\.py$'
+        additional_dependencies: [lxml]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.7.4
