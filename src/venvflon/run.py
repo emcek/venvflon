@@ -13,6 +13,7 @@ import tkinter as tk
 __version__ = '0.1.0'
 
 def run():
+    """Run the main GUI."""
     root_tk = tk.Tk()
     width, height = 300, 150
     root_tk.title(f'venvflon - v{__version__}')

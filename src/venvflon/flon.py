@@ -14,7 +14,14 @@ import tkinter as tk
 print(executable)
 
 class Gui(tk.Frame):
+    """Tkinter GUI for venvflon."""
+
     def __init__(self, master: tk.Tk) -> None:
+        """
+        Tkinter  GUI for venvflon.
+
+        :param master: Tkinter root
+        """
         super().__init__(master)
         self.master = master
         self.venv = tk.StringVar(value=' ')
@@ -30,6 +37,7 @@ class Gui(tk.Frame):
         self.update_status()
 
     def init_widgets(self) -> None:
+        """Initialize widgets."""
         self.master.columnconfigure(index=0, weight=1)
         cwd_label = tk.Label(self.master, text='cwd:')
         cwd_label.grid(row=0, column=0, sticky=tk.W)
@@ -39,6 +47,7 @@ class Gui(tk.Frame):
         self.add_venvs()
 
     def add_venvs(self):
+        """Add venvs as radio buttons to the GUI."""
         venv_label = tk.Label(self.master, text='venv:')
         venv_label.grid(row=1, column=0, sticky=tk.W)
         frame = tk.Frame(master=self.master, relief=tk.GROOVE, borderwidth=2)
@@ -50,10 +59,16 @@ class Gui(tk.Frame):
         status.grid(row=len(self.venv_list) + 1, column=0, columnspan=3, sticky=tk.E)
 
     def refresh_cwd(self, *args):
+        """
+        Refresh the current working directory.
+
+        :param args: internal tkinter arguments
+        """
         self.venv_list = venv_list_in(current_path=self.cwd)
         self.add_venvs()
 
     def venv_selected(self):
+        """Set the selected venv as the active one."""
         new_venv = self.venv.get()
         rm_sym_link(sym_link=Path(getcwd()) / '.venv')
         make_sym_link(to_path=Path(getcwd()) / '.venv', target=Path(new_venv))
@@ -61,5 +76,6 @@ class Gui(tk.Frame):
         self.update_status()
 
     def update_status(self):
+        """Update the status text."""
         out = get_command_output(cmd=['python', '-V'])
         self.status_txt.set(f'Current: {out[2].strip()}')

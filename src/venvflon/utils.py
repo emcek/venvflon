@@ -38,6 +38,12 @@ def get_command_output(cmd: Sequence[str], cwd: Path | None = None) -> tuple[int
 
 
 def make_sym_link(to_path: Path, target: Path) -> None:
+    """
+    Make symbolic link.
+
+    :param to_path: path to symbolic link
+    :param target: target path
+    """
     cmd_symlink = f'"New-Item -ItemType SymbolicLink -Path \\"{to_path}\\" -Target \\"{target}\\"'
     ps_command = f"Start-Process powershell.exe -ArgumentList '-Command {cmd_symlink}' -Verb RunAs"
     print(f'Make symbolic link: {ps_command}')
@@ -45,6 +51,11 @@ def make_sym_link(to_path: Path, target: Path) -> None:
 
 
 def rm_sym_link(sym_link: Path) -> None:
+    """
+    Remove symbolic link.
+
+    :param sym_link: path to symbolic link
+    """
     rm_symlink = f"(Get-Item '{sym_link}').Delete()"
     ps_command = f'Start-Process powershell.exe -ArgumentList "-Command {rm_symlink}" -Verb RunAs'
     print(f'Execute: {ps_command}')
@@ -52,6 +63,13 @@ def rm_sym_link(sym_link: Path) -> None:
 
 
 def venv_list_in(current_path: Path, max_depth: int = 1) -> Sequence[Path]:
+    """
+    Find all virtual environments in given path.
+
+    :param current_path: path to search in
+    :param max_depth: maximum depth of search
+    :return: list of paths to virtual environments
+    """
     result = []
     for dirpath, dirnames, _ in walk(current_path, topdown=True):
         for dirname in dirnames:
