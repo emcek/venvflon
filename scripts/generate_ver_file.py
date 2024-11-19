@@ -33,7 +33,7 @@ def generate_ver_info(major: int, minor: int, patch: int, build: int, dec_git_sh
               versioninfo.StringStruct('InternalName', 'dcs_py'),
               versioninfo.StringStruct('LegalCopyright', '© 2023 Michał Plichta. All rights reserved.'),
               versioninfo.StringStruct('OriginalFilename', 'dcs_py.exe'),
-              versioninfo.StringStruct('ProductName', 'DCSpy'),
+              versioninfo.StringStruct('ProductName', 'venvflon'),
               versioninfo.StringStruct('ProductVersion', f'{major}.{minor}.{patch}.{dec_git_sha}')])]),
               versioninfo.VarFileInfo([versioninfo.VarStruct('Translation', [1033, 1200])])])
     return ver_info
