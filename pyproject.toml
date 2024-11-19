@@ -43,10 +43,12 @@ flon = 'venvflon.run:run'
 
 [project.optional-dependencies]
 test = [
+    'GitPython==3.1.43',
     'interrogate==1.7.0',
     'isort==5.13.2',
     'lxml==5.3.0',
     'mypy==1.13.0',
+    'packaging==24.1',
     'pip-audit==2.7.3',
     'pytest==8.3.3',
     'pytest-randomly==3.16.0',
