@@ -13,15 +13,18 @@ import tkinter as tk
 print(executable)
 
 class Gui(tk.Frame):
-    def __init__(self, master: tk.Tk, ) -> None:
+    def __init__(self, master: tk.Tk) -> None:
         super().__init__(master)
         self.master = master
-        self.venv = tk.StringVar()
+        self.venv = tk.StringVar(value=' ')
         self.status_txt = tk.StringVar()
         self.cwd_entry = tk.StringVar()
         self.cwd = Path(getcwd()).parents[1]
         self.cwd_entry.set(str(self.cwd))
         self.venv_list = venv_list_in(current_path=self.cwd)
+        new_width, new_height = len(str(self.venv_list[0])) + 300, len(self.venv_list) * 55
+        self.master.geometry(f'{new_width}x{new_height}')
+        self.master.minsize(width=new_width, height=new_height)
         self.init_widgets()
         self.update_status()
 
@@ -29,7 +32,7 @@ class Gui(tk.Frame):
         self.master.columnconfigure(index=0, weight=1)
         cwd_label = tk.Label(self.master, text='cwd:')
         cwd_label.grid(row=0, column=0, sticky=tk.W)
-        cwd = tk.Entry(master=self.master, textvariable=self.cwd_entry, width=35)
+        cwd = tk.Entry(master=self.master, textvariable=self.cwd_entry, width=len(str(self.venv_list[0])) + 2)
         cwd.grid(row=0, column=1, sticky=tk.W)
         cwd.bind('<Return>', self.refresh_cwd)
         self.add_venvs()
@@ -43,7 +46,7 @@ class Gui(tk.Frame):
             rb_venvs = tk.Radiobutton(master=frame, text=str(text), variable=self.venv, value=text, command=self.venv_selected)
             rb_venvs.grid(row=i, column=1, pady=0, padx=2, sticky=tk.W)
         status = tk.Label(master=self.master, textvariable=self.status_txt)
-        status.grid(row=len(self.venv_list) + 1, column=0, columnspan=2, sticky=tk.E + tk.S)
+        status.grid(row=len(self.venv_list) + 1, column=0, columnspan=3, sticky=tk.E)
 
     def refresh_cwd(self, *args):
         self.venv_list = venv_list_in(current_path=self.cwd)
@@ -63,10 +66,9 @@ class Gui(tk.Frame):
 
 if __name__ == '__main__':
     root_tk = tk.Tk()
-    width, height = 270, 130
+    width, height = 300, 150
     root_tk.title('venvflon')
     root_tk.geometry(f'{width}x{height}')
-    root_tk.minsize(width=width, height=height)
     here = path.abspath(path.dirname(__file__))
     root_tk.iconphoto(False, tk.PhotoImage(file='img/cannula_64.png'))
     gui = Gui(master=root_tk)
