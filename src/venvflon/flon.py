@@ -1,15 +1,16 @@
 from __future__ import annotations
 
-from os import path, environ, getcwd
+from os import environ, getcwd
 from pathlib import Path
 from sys import base_prefix, executable
 from time import sleep
 
-from venvflon.utils import rm_sym_link, make_sym_link, venv_list_in, get_command_output
+from venvflon.utils import get_command_output, make_sym_link, rm_sym_link, venv_list_in
 
-environ["TCL_LIBRARY"] = str(Path(base_prefix) / "tcl" / "tcl8.6")
-environ["TK_LIBRARY"] = str(Path(base_prefix) / "tcl" / "tk8.6")
+environ['TCL_LIBRARY'] = str(Path(base_prefix) / 'tcl' / 'tcl8.6')
+environ['TK_LIBRARY'] = str(Path(base_prefix) / 'tcl' / 'tk8.6')
 import tkinter as tk
+
 print(executable)
 
 class Gui(tk.Frame):
@@ -19,7 +20,7 @@ class Gui(tk.Frame):
         self.venv = tk.StringVar(value=' ')
         self.status_txt = tk.StringVar()
         self.cwd_entry = tk.StringVar()
-        self.cwd = Path(getcwd()).parents[1]
+        self.cwd = Path(getcwd())
         self.cwd_entry.set(str(self.cwd))
         self.venv_list = venv_list_in(current_path=self.cwd)
         new_width, new_height = len(str(self.venv_list[0])) + 300, len(self.venv_list) * 55
@@ -54,22 +55,11 @@ class Gui(tk.Frame):
 
     def venv_selected(self):
         new_venv = self.venv.get()
-        rm_sym_link(sym_link=Path(getcwd()).parents[1] / '.venv')
-        make_sym_link(to_path=Path(getcwd()).parents[1] / '.venv', target=Path(new_venv))
+        rm_sym_link(sym_link=Path(getcwd()) / '.venv')
+        make_sym_link(to_path=Path(getcwd()) / '.venv', target=Path(new_venv))
         sleep(0.8)
         self.update_status()
 
     def update_status(self):
         out = get_command_output(cmd=['python', '-V'])
         self.status_txt.set(f'Current: {out[2].strip()}')
-
-
-if __name__ == '__main__':
-    root_tk = tk.Tk()
-    width, height = 300, 150
-    root_tk.title('venvflon')
-    root_tk.geometry(f'{width}x{height}')
-    here = path.abspath(path.dirname(__file__))
-    root_tk.iconphoto(False, tk.PhotoImage(file='img/cannula_64.png'))
-    gui = Gui(master=root_tk)
-    gui.mainloop()
