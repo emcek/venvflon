@@ -12,6 +12,7 @@ import tkinter as tk
 
 __version__ = '0.1.0'
 
+
 def run():
     """Run the main GUI."""
     root_tk = tk.Tk()
