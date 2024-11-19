@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from os import walk, sep
+from collections.abc import Sequence
+from os import sep, walk
 from pathlib import Path
-from subprocess import run, CalledProcessError
-from typing import Sequence
+from subprocess import CalledProcessError, run
 
 
 def run_command(cmd: Sequence[str], cwd: Path | None = None) -> int:
