@@ -4,6 +4,7 @@ from collections.abc import Sequence
 from os import sep, walk
 from pathlib import Path
 from subprocess import CalledProcessError, run
+from time import sleep
 
 
 def run_command(cmd: Sequence[str], cwd: Path | None = None) -> int:
@@ -37,29 +38,38 @@ def get_command_output(cmd: Sequence[str], cwd: Path | None = None) -> tuple[int
         return e.returncode, e.stderr.decode('utf-8'), e.stdout.decode('utf-8')
 
 
-def make_sym_link(to_path: Path, target: Path) -> None:
+def make_sym_link(to_path: Path, target: Path, mode: bool = False) -> None:
     """
     Make symbolic link.
 
     :param to_path: path to symbolic link
     :param target: target path
+    :param mode: if True use Python to make symbolic link
     """
-    cmd_symlink = f'"New-Item -ItemType SymbolicLink -Path \\"{to_path}\\" -Target \\"{target}\\"'
-    ps_command = f"Start-Process powershell.exe -ArgumentList '-Command {cmd_symlink}' -Verb RunAs"
-    print(f'Make symbolic link: {ps_command}')
-    run_command(cmd=['powershell.exe', '-Command', ps_command])
+    if mode:
+        to_path.symlink_to(target=target, target_is_directory=True)
+    else:
+        cmd_symlink = f'"New-Item -ItemType SymbolicLink -Path \\"{to_path}\\" -Target \\"{target}\\"'
+        ps_command = f"Start-Process powershell.exe -ArgumentList '-Command {cmd_symlink}' -Verb RunAs"
+        print(f'Make symbolic link: {ps_command}')
+        run_command(cmd=['powershell.exe', '-Command', ps_command])
+        sleep(0.8)
 
 
-def rm_sym_link(sym_link: Path) -> None:
+def rm_sym_link(sym_link: Path, mode: bool = False) -> None:
     """
     Remove symbolic link.
 
     :param sym_link: path to symbolic link
+    :param mode: if True use Python to remove symbolic link
     """
-    rm_symlink = f"(Get-Item '{sym_link}').Delete()"
-    ps_command = f'Start-Process powershell.exe -ArgumentList "-Command {rm_symlink}" -Verb RunAs'
-    print(f'Execute: {ps_command}')
-    run_command(cmd=['powershell.exe', '-Command', ps_command])
+    if mode:
+        sym_link.unlink()
+    else:
+        rm_symlink = f"(Get-Item '{sym_link}').Delete()"
+        ps_command = f'Start-Process powershell.exe -ArgumentList "-Command {rm_symlink}" -Verb RunAs'
+        print(f'Execute: {ps_command}')
+        run_command(cmd=['powershell.exe', '-Command', ps_command])
 
 
 def venv_list_in(current_path: Path, max_depth: int = 1) -> Sequence[Path]:

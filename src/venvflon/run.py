@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from argparse import ArgumentParser, Namespace
 from os import environ
 from pathlib import Path
 from sys import base_prefix
@@ -13,16 +14,25 @@ import tkinter as tk
 __version__ = '0.1.0'
 
 
-def run():
-    """Run the main GUI."""
+def run(cli_args=Namespace()):
+    """
+    Run the main GUI.
+
+    :param cli_args: Namespace object containing command line arguments
+    """
     root_tk = tk.Tk()
     width, height = 300, 150
     root_tk.title(f'venvflon - v{__version__}')
     root_tk.geometry(f'{width}x{height}')
     root_tk.iconphoto(False, tk.PhotoImage(file=Path(__file__).parent / 'img' / 'cannula_64.png'))
-    gui = Gui(master=root_tk)
+    gui = Gui(master=root_tk, cli_args=cli_args)
     gui.mainloop()
 
 
 if __name__ == '__main__':
-    run()
+    parser = ArgumentParser(description='simple virtual environment switcher')
+    parser.add_argument('-V', '--version', action='version', version='%(prog)s version: ' + __version__)
+    parser.add_argument('-p', '--py', action='store_true', dest='link_mode', help='Use Python to make symbolic link')
+    args = parser.parse_args()
+    print(args)
+    run(cli_args=args)

@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+from argparse import Namespace
 from os import environ, getcwd
 from pathlib import Path
 from sys import base_prefix
-from time import sleep
 
 from venvflon.utils import get_command_output, make_sym_link, rm_sym_link, venv_list_in
 
@@ -15,14 +15,16 @@ import tkinter as tk
 class Gui(tk.Frame):
     """Tkinter GUI for venvflon."""
 
-    def __init__(self, master: tk.Tk) -> None:
+    def __init__(self, master: tk.Tk, cli_args=Namespace()) -> None:
         """
         Tkinter  GUI for venvflon.
 
         :param master: Tkinter root
+        :param cli_args: CLI arguments
         """
         super().__init__(master)
         self.master = master
+        self.config = cli_args  # type: ignore[method-assign]
         self.venv = tk.StringVar(value=' ')
         self.status_txt = tk.StringVar()
         self.cwd_entry = tk.StringVar()
@@ -69,9 +71,8 @@ class Gui(tk.Frame):
     def venv_selected(self):
         """Set the selected venv as the active one."""
         new_venv = self.venv.get()
-        rm_sym_link(sym_link=Path(getcwd()) / '.venv')
-        make_sym_link(to_path=Path(getcwd()) / '.venv', target=Path(new_venv))
-        sleep(0.8)
+        rm_sym_link(sym_link=Path(getcwd()) / '.venv', mode=self.config.link_mode)
+        make_sym_link(to_path=Path(getcwd()) / '.venv', target=Path(new_venv), mode=self.config.link_mode)
         self.update_status()
 
     def update_status(self):
