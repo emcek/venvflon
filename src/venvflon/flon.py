@@ -28,9 +28,8 @@ class Gui(tk.Frame):
         self.venv = tk.StringVar(value=' ')
         self.status_txt = tk.StringVar()
         self.cwd_entry = tk.StringVar()
-        self.cwd = Path(getcwd())
-        self.cwd_entry.set(str(self.cwd))
-        self.venv_list = venv_list_in(current_path=self.cwd)
+        self.cwd_entry.set(getcwd())
+        self.venv_list = venv_list_in(current_path=Path(getcwd()))
         venv_txt_length = 30 if not len(self.venv_list) else len(str(self.venv_list[0]))
         venv_txt_height = 2 if not len(self.venv_list) else len(self.venv_list)
         new_width, new_height = venv_txt_length + 300, venv_txt_height * 55
