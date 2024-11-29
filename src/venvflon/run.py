@@ -11,7 +11,7 @@ environ['TCL_LIBRARY'] = str(Path(base_prefix) / 'tcl' / 'tcl8.6')
 environ['TK_LIBRARY'] = str(Path(base_prefix) / 'tcl' / 'tk8.6')
 import tkinter as tk
 
-__version__ = '0.1.0'
+__version__ = '0.2.0'
 
 
 def run(cli_args=Namespace()):
