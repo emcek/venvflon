@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from argparse import Namespace
-from os import environ, getcwd
+from os import chdir, environ, getcwd
 from pathlib import Path
 from sys import base_prefix
 
@@ -31,9 +31,14 @@ class Gui(tk.Frame):
         self.cwd = Path(getcwd())
         self.cwd_entry.set(str(self.cwd))
         self.venv_list = venv_list_in(current_path=self.cwd)
-        new_width, new_height = len(str(self.venv_list[0])) + 300, len(self.venv_list) * 55
+        venv_txt_length = 30 if not len(self.venv_list) else len(str(self.venv_list[0]))
+        venv_txt_height = 2 if not len(self.venv_list) else len(self.venv_list)
+        new_width, new_height = venv_txt_length + 300, venv_txt_height * 55
         self.master.geometry(f'{new_width}x{new_height}')
         self.master.minsize(width=new_width, height=new_height)
+        self.frame = tk.Frame(master=self.master, relief=tk.GROOVE, borderwidth=2)
+        self.status = tk.Label(master=self.master, textvariable=self.status_txt)
+        self.cwd = tk.Entry(master=self.master, textvariable=self.cwd_entry, width=venv_txt_length + 2)
         self.init_widgets()
         self.update_status()
 
@@ -42,22 +47,26 @@ class Gui(tk.Frame):
         self.master.columnconfigure(index=0, weight=1)
         cwd_label = tk.Label(self.master, text='cwd:')
         cwd_label.grid(row=0, column=0, sticky=tk.W)
-        cwd = tk.Entry(master=self.master, textvariable=self.cwd_entry, width=len(str(self.venv_list[0])) + 2)
-        cwd.grid(row=0, column=1, sticky=tk.W)
-        cwd.bind('<Return>', self.refresh_cwd)
+        self.cwd.grid(row=0, column=1, sticky=tk.W)
+        self.cwd.bind('<Return>', self.refresh_cwd)
         self.add_venvs()
 
     def add_venvs(self):
         """Add venvs as radio buttons to the GUI."""
         venv_label = tk.Label(self.master, text='venv:')
         venv_label.grid(row=1, column=0, sticky=tk.W)
-        frame = tk.Frame(master=self.master, relief=tk.GROOVE, borderwidth=2)
-        frame.grid(row=1, column=1, columnspan=2, padx=2, pady=2, rowspan=len(self.venv_list))
-        for i, text in enumerate(self.venv_list, 1):
-            rb_venvs = tk.Radiobutton(master=frame, text=str(text), variable=self.venv, value=text, command=self.venv_selected)
-            rb_venvs.grid(row=i, column=1, pady=0, padx=2, sticky=tk.W)
-        status = tk.Label(master=self.master, textvariable=self.status_txt)
-        status.grid(row=len(self.venv_list) + 1, column=0, columnspan=3, sticky=tk.E)
+        self._remove_old_radiobutttons()
+        if len(self.venv_list):
+            self.frame.grid(row=1, column=1, columnspan=2, padx=2, pady=2, rowspan=len(self.venv_list))
+            for i, text in enumerate(self.venv_list, 1):
+                rb_venvs = tk.Radiobutton(master=self.frame, text=str(text), variable=self.venv, value=text, command=self.venv_selected)
+                rb_venvs.grid(row=i, column=1, pady=0, padx=2, sticky=tk.W)
+        self.status.grid(row=len(self.venv_list) + 5, column=0, columnspan=3, sticky=tk.W)
+
+    def _remove_old_radiobutttons(self):
+        """Remove old Radio buttons for venvs."""
+        for venv_rb in self.frame.grid_slaves():
+            venv_rb.destroy()
 
     def refresh_cwd(self, *args):
         """
@@ -65,7 +74,9 @@ class Gui(tk.Frame):
 
         :param args: internal tkinter arguments
         """
-        self.venv_list = venv_list_in(current_path=self.cwd)
+        new_cwd = Path(self.cwd_entry.get())
+        chdir(new_cwd)
+        self.venv_list = venv_list_in(current_path=new_cwd)
         self.add_venvs()
 
     def venv_selected(self):
