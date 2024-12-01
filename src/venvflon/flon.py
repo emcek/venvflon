@@ -54,7 +54,7 @@ class Gui(tk.Frame):
         """Add venvs as radio buttons to the GUI."""
         venv_label = tk.Label(self.master, text='venv:')
         venv_label.grid(row=1, column=0, sticky=tk.W)
-        self._remove_old_radiobutttons()
+        self._remove_old_radiobuttons()
         if len(self.venv_list):
             self.frame.grid(row=1, column=1, columnspan=2, padx=2, pady=2, rowspan=len(self.venv_list))
             for i, text in enumerate(self.venv_list, 1):
@@ -62,7 +62,7 @@ class Gui(tk.Frame):
                 rb_venvs.grid(row=i, column=1, pady=0, padx=2, sticky=tk.W)
         self.status.grid(row=len(self.venv_list) + 5, column=0, columnspan=3, sticky=tk.W)
 
-    def _remove_old_radiobutttons(self):
+    def _remove_old_radiobuttons(self):
         """Remove old Radio buttons for venvs."""
         for venv_rb in self.frame.grid_slaves():
             venv_rb.destroy()
@@ -71,7 +71,7 @@ class Gui(tk.Frame):
         """
         Refresh the current working directory.
 
-        :param args: internal tkinter arguments
+        :param args: Internal tkinter arguments
         """
         new_cwd = Path(self.cwd_entry.get())
         chdir(new_cwd)

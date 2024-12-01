@@ -40,11 +40,11 @@ def get_command_output(cmd: Sequence[str], cwd: Path | None = None) -> tuple[int
 
 def make_sym_link(to_path: Path, target: Path, mode: bool = False) -> None:
     """
-    Make symbolic link.
+    Make a symbolic link.
 
-    :param to_path: path to symbolic link
-    :param target: target path
-    :param mode: if True use Python to make symbolic link
+    :param to_path: Path to a symbolic link
+    :param target: Target path
+    :param mode: If set to True use Python to make a symbolic link
     """
     if mode:
         to_path.symlink_to(target=target, target_is_directory=True)
@@ -58,10 +58,10 @@ def make_sym_link(to_path: Path, target: Path, mode: bool = False) -> None:
 
 def rm_sym_link(sym_link: Path, mode: bool = False) -> None:
     """
-    Remove symbolic link.
+    Remove a symbolic link.
 
-    :param sym_link: path to symbolic link
-    :param mode: if True use Python to remove symbolic link
+    :param sym_link: Path to a symbolic link
+    :param mode: If set to True use Python to remove a symbolic link
     """
     if mode:
         sym_link.unlink()
@@ -74,17 +74,17 @@ def rm_sym_link(sym_link: Path, mode: bool = False) -> None:
 
 def venv_list_in(current_path: Path, max_depth: int = 1) -> Sequence[Path]:
     """
-    Find all virtual environments in given path.
+    Find all virtual environments in a given path.
 
-    :param current_path: path to search in
-    :param max_depth: maximum depth of search
-    :return: list of paths to virtual environments
+    :param current_path: Path to search in
+    :param max_depth: Maximum depth of search
+    :return: A list of paths to virtual environments
     """
     result = []
-    for dirpath, dirnames, _ in walk(current_path, topdown=True):
-        for dirname in dirnames:
+    for dir_path, dir_names, _ in walk(current_path, topdown=True):
+        for dirname in dir_names:
             if '.venv_' in dirname:
-                result.append(Path(dirpath) / dirname)
-        if dirpath.count(sep) - str(current_path).count(sep) == max_depth - 1:
-            del dirnames[:]
+                result.append(Path(dir_path) / dirname)
+        if dir_path.count(sep) - str(current_path).count(sep) == max_depth - 1:
+            del dir_names[:]
     return result
