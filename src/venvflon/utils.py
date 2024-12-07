@@ -9,6 +9,7 @@ from time import sleep
 
 
 class LinkMode(Enum):
+    """Mode to create symbolic link."""
     PYTHON = 'python.exe'
     PWSH5 = 'powershell.exe'
     PWSH7 = 'pwsh.exe'
