@@ -61,7 +61,7 @@ def make_sym_link(to_path: Path, target: Path, mode: LinkMode = LinkMode.PWSH5) 
         ps_command = f"Start-Process {mode.value} -ArgumentList '-Command {cmd_symlink}' -Verb RunAs"
         print(f'Make symbolic link: {ps_command}')
         run_command(cmd=[mode.value, '-Command', ps_command])
-        sleep(0.8)
+        sleep(1.2)
 
 
 def rm_sym_link(sym_link: Path, mode: LinkMode = LinkMode.PWSH5) -> None:
