@@ -32,7 +32,8 @@ def run(cli_args=Namespace()):
 if __name__ == '__main__':
     parser = ArgumentParser(description='simple virtual environment switcher')
     parser.add_argument('-V', '--version', action='version', version='%(prog)s version: ' + __version__)
-    parser.add_argument('-p', '--pwsh', action='store', dest='link_mode', type=int, choices=[0, 5, 7], default=5, help='0 - use Python, pwsh5 or pwsh7 to make symbolic link')
+    parser.add_argument('-p', '--pwsh', action='store', dest='link_mode', type=int, choices=[0, 5, 7], default=5,
+                        help='0 - use Python, pwsh5 or pwsh7 to make symbolic link')
     args = parser.parse_args()
     print(args)
     run(cli_args=args)

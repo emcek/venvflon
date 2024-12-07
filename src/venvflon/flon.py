@@ -25,7 +25,7 @@ class Gui(tk.Frame):
         super().__init__(master)
         self.master = master
         self.config = cli_args  # type: ignore[method-assign]
-        self.config.link_mode = {0: LinkMode.PYTHON, 5: LinkMode.PWSH5, 7: LinkMode.PWSH7}[cli_args.link_mode]
+        self.config.link_mode = {0: LinkMode.PYTHON, 5: LinkMode.PWSH5, 7: LinkMode.PWSH7}[cli_args.link_mode]  # type: ignore[attr-defined]
         self.venv = tk.StringVar(value=' ')
         self.status_txt = tk.StringVar()
         self.cwd_entry = tk.StringVar()
