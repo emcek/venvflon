@@ -76,6 +76,7 @@ class Gui(tk.Frame):
         """
         new_cwd = Path(self.cwd_entry.get())
         chdir(new_cwd)
+        self.master.title(f'venvflon - {new_cwd.name}')
         self.venv_list = venv_list_in(current_path=new_cwd)
         self.add_venvs()
 
