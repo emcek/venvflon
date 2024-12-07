@@ -1,4 +1,3 @@
-from pathlib import Path
 from sys import platform
 
 from pytest import mark
