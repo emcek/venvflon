@@ -46,13 +46,14 @@ def get_command_output(cmd: Sequence[str], cwd: Path | None = None) -> tuple[int
         return e.returncode, e.stderr.decode('utf-8'), e.stdout.decode('utf-8')
 
 
-def make_sym_link(to_path: Path, target: Path, mode: LinkMode = LinkMode.PWSH5) -> None:
+def make_sym_link(to_path: Path, target: Path, mode: LinkMode = LinkMode.PWSH5, timer: float = 1.2) -> None:
     """
     Make a symbolic link.
 
     :param to_path: Path to a symbolic link
     :param target: Target path
     :param mode: Method to create symbolic name
+    :param timer: sleeping timer for PowerShell5 and 7 option
     """
     if mode == LinkMode.PYTHON:
         to_path.symlink_to(target=target, target_is_directory=True)
@@ -61,7 +62,7 @@ def make_sym_link(to_path: Path, target: Path, mode: LinkMode = LinkMode.PWSH5) 
         ps_command = f"Start-Process {mode.value} -ArgumentList '-Command {cmd_symlink}' -Verb RunAs"
         print(f'Make symbolic link: {ps_command}')
         run_command(cmd=[mode.value, '-Command', ps_command])
-        sleep(1.2)
+        sleep(timer)
 
 
 def rm_sym_link(sym_link: Path, mode: LinkMode = LinkMode.PWSH5) -> None:
