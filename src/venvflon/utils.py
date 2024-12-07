@@ -71,7 +71,7 @@ def rm_sym_link(sym_link: Path, mode: LinkMode = LinkMode.PWSH5) -> None:
     :param mode: How to remove a symbolic link
     """
     if mode == LinkMode.PYTHON:
-        sym_link.unlink()
+        sym_link.unlink(missing_ok=True)
     else:
         rm_symlink = f"(Get-Item '{sym_link}').Delete()"
         ps_command = f'Start-Process {mode.value} -ArgumentList "-Command {rm_symlink}" -Verb RunAs'
