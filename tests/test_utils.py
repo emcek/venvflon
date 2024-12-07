@@ -1,7 +1,7 @@
 from pathlib import Path
 from sys import platform
 
-from pytest import mark, raises
+from pytest import mark
 
 from venvflon import utils
 
@@ -32,8 +32,12 @@ def test_make_and_remove_sym_link():
     new_sym_link = Path(__file__).parent / 'new'
     utils.make_sym_link(to_path=new_sym_link, target=Path(__file__), mode=utils.LinkMode.PYTHON)
     assert new_sym_link.is_symlink()
-    assert not new_sym_link.is_dir()
-    assert new_sym_link.is_file()
+    if platform == 'linux':
+        assert not new_sym_link.is_dir()
+        assert new_sym_link.is_file()
+    elif platform == 'win32':
+        assert new_sym_link.is_dir()
+        assert not new_sym_link.is_file()
     utils.rm_sym_link(sym_link=new_sym_link, mode=utils.LinkMode.PYTHON)
     assert not new_sym_link.exists()
 
