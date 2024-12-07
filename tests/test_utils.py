@@ -41,7 +41,7 @@ def test_make_and_remove_sym_link():
     utils.make_sym_link(to_path=new_sym_link, target=Path(__file__), mode=LinkMode.PYTHON)
     assert new_sym_link.is_symlink()
     assert not new_sym_link.is_dir()
-    assert not new_sym_link.is_file()
+    assert new_sym_link.is_file()
     utils.rm_sym_link(sym_link=new_sym_link, mode=LinkMode.PYTHON)
     assert not new_sym_link.exists()
 
