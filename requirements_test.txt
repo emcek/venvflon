@@ -1,3 +1,4 @@
+-r requirements.txt
 GitPython==3.1.43
 interrogate==1.7.0
 isort==5.13.2

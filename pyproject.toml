@@ -29,7 +29,9 @@ keywords = [
     'venv', 'uv', 'virtualenv',
 ]
 dynamic = ['version']
-
+dependencies = [
+    'tkinterdnd2==0.4.2',
+]
 [project.urls]
 Homepage = 'https://github.com/emcek/venvflon'
 Source = 'https://github.com/emcek/venvflon.git'
