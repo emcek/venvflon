@@ -89,5 +89,5 @@ class Gui(tk.Frame):
 
     def update_status(self):
         """Update the status text."""
-        out = get_command_output(cmd=['.venv\Scripts\python.exe', '-V'])
+        out = get_command_output(cmd=[r'.venv\Scripts\python.exe', '-V'])
         self.status_txt.set(f'Current: {out[2].strip()}')
