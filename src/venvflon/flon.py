@@ -23,7 +23,7 @@ class Gui(tk.Frame):
         :param cli_args: CLI arguments
         """
         super().__init__(master)
-        self.master = master
+        self.master: tk.Tk = master
         self.config = cli_args  # type: ignore[method-assign]
         self.config.link_mode = {0: LinkMode.PYTHON, 5: LinkMode.PWSH5, 7: LinkMode.PWSH7}[cli_args.link_mode]  # type: ignore[attr-defined]
         self.venv = tk.StringVar(value=' ')
