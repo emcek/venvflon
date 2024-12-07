@@ -26,6 +26,6 @@ def test_success_deep_2_venv_list_in(resources):
     assert sorted([venv.name for venv in venvs]) == ['.venv_310', '.venv_311', '.venv_312', '.venv_39']
 
 
-def test_failure_venv_list_in():
-    venvs = utils.venv_list_in(current_path=Path('..'), max_depth=1)
+def test_failure_venv_list_in(resources):
+    venvs = utils.venv_list_in(current_path=resources / '.venv10', max_depth=1)
     assert len(venvs) == 0
