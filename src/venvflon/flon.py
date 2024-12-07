@@ -5,7 +5,7 @@ from os import chdir, environ, getcwd
 from pathlib import Path
 from sys import base_prefix
 
-from venvflon.utils import get_command_output, make_sym_link, rm_sym_link, venv_list_in, LinkMode
+from venvflon.utils import LinkMode, get_command_output, make_sym_link, rm_sym_link, venv_list_in
 
 environ['TCL_LIBRARY'] = str(Path(base_prefix) / 'tcl' / 'tcl8.6')
 environ['TK_LIBRARY'] = str(Path(base_prefix) / 'tcl' / 'tk8.6')
