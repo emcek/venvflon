@@ -1,3 +1,6 @@
+## 0.3.1
+* increase timer for creating symlink with PowerShell5 to 1.2 sec
+
 ## 0.3.0
 * Change cli argument (`-p` or `--pwsh`) as triple choice `0`, `5`, `7` to use **Python**, **PowerShell5** or **PowerShell7** respectively to create symbolic link
 * Fix unlink for Python
