@@ -27,16 +27,7 @@ def test_get_command_output_failure():
     assert out == ''
 
 
-@mark.skipif(condition=platform != 'win32', reason='Run only on Windows')
-def test_make_sym_link_windows_without_admin():
-    # with raises(OSError) as err:
-    new_sym_link = Path(__file__).parent / 'new'
-    utils.make_sym_link(to_path=new_sym_link, target=Path(__file__), mode=utils.LinkMode.PYTHON)
-    assert new_sym_link.is_symlink()
-    # assert err.value.strerror == 'A required privilege is not held by the client'
-
-
-@mark.skipif(condition=platform != 'linux', reason='Run only on Linux')
+@mark.ci
 def test_make_and_remove_sym_link():
     new_sym_link = Path(__file__).parent / 'new'
     utils.make_sym_link(to_path=new_sym_link, target=Path(__file__), mode=utils.LinkMode.PYTHON)

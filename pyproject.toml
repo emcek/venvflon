@@ -75,6 +75,7 @@ pythonpath = ['src']
 testpaths = ['tests']
 markers = [
     'slow: marks tests as slow',
+    'ci: marks tests to run during CI process',
 ]
 
 [tool.interrogate]
