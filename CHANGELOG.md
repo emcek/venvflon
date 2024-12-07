@@ -1,3 +1,6 @@
+## 0.3.2
+* add `-t` and `--timer` cli parameter to specify sleeping timer form pwsh5 and pwsh7 option
+
 ## 0.3.1
 * increase timer for creating symlink with PowerShell5 to 1.2 sec
 * add more unit tests
