@@ -4,7 +4,6 @@ from sys import platform
 from pytest import mark, raises
 
 from venvflon import utils
-from venvflon.utils import LinkMode
 
 
 @mark.slow
@@ -31,18 +30,18 @@ def test_get_command_output_failure():
 @mark.skipif(condition=platform != 'win32', reason='Run only on Windows')
 def test_make_sym_link_windows_without_admin():
     with raises(OSError) as err:
-        utils.make_sym_link(to_path=Path(__file__).parent / 'new', target=Path(__file__), mode=LinkMode.PYTHON)
+        utils.make_sym_link(to_path=Path(__file__).parent / 'new', target=Path(__file__), mode=utils.LinkMode.PYTHON)
     assert err.value.strerror == 'A required privilege is not held by the client'
 
 
 @mark.skipif(condition=platform != 'linux', reason='Run only on Linux')
 def test_make_and_remove_sym_link():
     new_sym_link = Path(__file__).parent / 'new'
-    utils.make_sym_link(to_path=new_sym_link, target=Path(__file__), mode=LinkMode.PYTHON)
+    utils.make_sym_link(to_path=new_sym_link, target=Path(__file__), mode=utils.LinkMode.PYTHON)
     assert new_sym_link.is_symlink()
     assert not new_sym_link.is_dir()
     assert new_sym_link.is_file()
-    utils.rm_sym_link(sym_link=new_sym_link, mode=LinkMode.PYTHON)
+    utils.rm_sym_link(sym_link=new_sym_link, mode=utils.LinkMode.PYTHON)
     assert not new_sym_link.exists()
 
 
