@@ -5,7 +5,7 @@ from os import chdir, environ, getcwd
 from pathlib import Path
 from sys import base_prefix
 
-from venvflon.utils import get_command_output, make_sym_link, rm_sym_link, venv_list_in
+from venvflon.utils import get_command_output, make_sym_link, rm_sym_link, venv_list_in, LinkMode
 
 environ['TCL_LIBRARY'] = str(Path(base_prefix) / 'tcl' / 'tcl8.6')
 environ['TK_LIBRARY'] = str(Path(base_prefix) / 'tcl' / 'tk8.6')
@@ -25,6 +25,7 @@ class Gui(tk.Frame):
         super().__init__(master)
         self.master = master
         self.config = cli_args  # type: ignore[method-assign]
+        self.config.link_mode = {0: LinkMode.PYTHON, 5: LinkMode.PWSH5, 7: LinkMode.PWSH7}[cli_args.link_mode]
         self.venv = tk.StringVar(value=' ')
         self.status_txt = tk.StringVar()
         self.cwd_entry = tk.StringVar()
