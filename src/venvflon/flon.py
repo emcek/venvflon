@@ -40,7 +40,6 @@ class Gui(tk.Frame):
         self.status = tk.Label(master=self.master, textvariable=self.status_txt)
         self.cwd = tk.Entry(master=self.master, textvariable=self.cwd_entry, width=venv_txt_length + 2)
         self.init_widgets()
-        self.update_status()
 
     def init_widgets(self) -> None:
         """Initialize widgets."""
@@ -64,6 +63,7 @@ class Gui(tk.Frame):
                 rb_venvs.configure(command=self.venv_selected)
                 rb_venvs.grid(row=i, column=1, pady=0, padx=2, sticky=tk.W)
         self.status.grid(row=len(self.venv_list) + 5, column=0, columnspan=3, sticky=tk.W)
+        self.update_status()
 
     def _remove_old_radiobuttons(self) -> None:
         """Remove old Radio buttons for venvs."""
