@@ -5,12 +5,27 @@
 [![Downloads](https://img.shields.io/github/downloads/emcek/venvflon/total?label=Downloads)](https://github.com/emcek/venvflon/releases)
 [![venvflon](https://snyk.io/advisor/python/venvflon/badge.svg)](https://snyk.io/advisor/python/venvflon)
 [![image](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue.svg)](https://github.com/emcek/venvflon)
-
-[//]: # ([![dcspy]&#40;https://snyk.io/advisor/python/dcspy/badge.svg&#41;]&#40;https://snyk.io/advisor/python/venvflon&#41;)
-[//]: # ([![Downloads]&#40;https://static.pepy.tech/badge/venvflon&#41;]&#40;https://pepy.tech/project/venvflon&#41;)
+[![Downloads](https://static.pepy.tech/badge/venvflon)](https://pepy.tech/project/venvflon)
 
 # venvflon
 simple virtual environment switcher
 
 ## name
 Comes from polish `wenflon` or `kaniula` (eng. `cannula`)
+
+## installation
+The preferred way of installing using [uv](https://github.com/astral-sh/uv) tool:
+``` console
+uv tool install --python 3.13.1 venvflon
+```
+Please use Python 3.13.1+ (or any 3.12.x) due to 3.13.0 run extra terminal window even if it was disabled.
+
+## update
+``` console
+uv tool update venvflon
+```
+
+## uninstall
+``` console
+uv tool uninstall venvflon
+```
