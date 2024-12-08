@@ -15,7 +15,7 @@ import tkinter as tk
 class Gui(tk.Frame):
     """Tkinter GUI for venvflon."""
 
-    def __init__(self, master: tk.Tk, cli_args=Namespace()) -> None:
+    def __init__(self, master: tk.Tk, cli_args: Namespace) -> None:
         """
         Tkinter  GUI for venvflon.
 
@@ -24,8 +24,8 @@ class Gui(tk.Frame):
         """
         super().__init__(master)
         self.master: tk.Tk = master
-        self.config = cli_args  # type: ignore[method-assign]
-        self.config.link_mode = {0: LinkMode.PYTHON, 5: LinkMode.PWSH5, 7: LinkMode.PWSH7}[cli_args.link_mode]  # type: ignore[attr-defined]
+        self.config: Namespace = cli_args  # type: ignore[assignment]
+        self.config.link_mode = {0: LinkMode.PYTHON, 5: LinkMode.PWSH5, 7: LinkMode.PWSH7}[cli_args.link_mode]
         self.venv = tk.StringVar(value=' ')
         self.status_txt = tk.StringVar()
         self.cwd_entry = tk.StringVar()
