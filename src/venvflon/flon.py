@@ -86,7 +86,6 @@ class Gui(tk.Frame):
 
         :param args: Internal tkinter arguments
         """
-        print(type(args[0]))
         new_cwd = Path(self.cwd_entry.get())
         chdir(new_cwd)
         self.master.title(f'venvflon - {new_cwd.name}')
