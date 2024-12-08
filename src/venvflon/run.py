@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from argparse import ArgumentParser, Namespace
+from argparse import ArgumentParser
 from os import environ
 from pathlib import Path
 from sys import base_prefix
@@ -14,22 +14,8 @@ import tkinter as tk
 __version__ = '0.3.1'
 
 
-def run(cli_args=Namespace()):
-    """
-    Run the main GUI.
-
-    :param cli_args: Namespace object containing command line arguments
-    """
-    root_tk = tk.Tk()
-    width, height = 300, 150
-    root_tk.title(f'venvflon - v{__version__}')
-    root_tk.geometry(f'{width}x{height}')
-    root_tk.iconphoto(False, tk.PhotoImage(file=Path(__file__).parent / 'img' / 'cannula_64.png'))
-    gui = Gui(master=root_tk, cli_args=cli_args)
-    gui.mainloop()
-
-
-if __name__ == '__main__':
+def run():
+    """Run the main GUI."""
     parser = ArgumentParser(description='simple virtual environment switcher')
     parser.add_argument('-V', '--version', action='version', version='%(prog)s version: ' + __version__)
     parser.add_argument('-p', '--pwsh', action='store', dest='link_mode', type=int, choices=[0, 5, 7], default=5,
@@ -37,5 +23,15 @@ if __name__ == '__main__':
     parser.add_argument('-t', '--timer', action='store', dest='timer', type=float, default=1.2,
                         help='sleep time (in seconds) for pwsh5 and pwsh7')
     args = parser.parse_args()
-    print(args)
-    run(cli_args=args)
+
+    root_tk = tk.Tk()
+    width, height = 300, 150
+    root_tk.title(f'venvflon - v{__version__}')
+    root_tk.geometry(f'{width}x{height}')
+    root_tk.iconphoto(False, tk.PhotoImage(file=Path(__file__).parent / 'img' / 'cannula_64.png'))
+    gui = Gui(master=root_tk, cli_args=args)
+    gui.mainloop()
+
+
+if __name__ == '__main__':
+    run()
