@@ -44,10 +44,9 @@ def get_command_output(cmd: Sequence[str], cwd: Path | None = None) -> tuple[int
     except CalledProcessError as e:
         print(f'Result: {e}')
         return e.returncode, e.stderr.decode('utf-8'), e.stdout.decode('utf-8')
-    # todo: make it batter
     except (CalledProcessError, FileNotFoundError) as e:
         print(f'Result: {e}')
-        return 255, '', str(e)
+        return 255, '', 'None of venv were detected'
 
 
 def make_sym_link(to_path: Path, target: Path, mode: LinkMode = LinkMode.PWSH5, timer: float = 1.2) -> None:
