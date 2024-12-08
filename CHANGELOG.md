@@ -1,3 +1,6 @@
+## 0.4.1
+* Update statusbar when change cwd
+
 ## 0.4.0
 * Select at the start current venv which symlink point to
 
