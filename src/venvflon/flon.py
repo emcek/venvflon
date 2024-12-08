@@ -83,8 +83,9 @@ class Gui(tk.Frame):
     def venv_selected(self):
         """Set the selected venv as the active one."""
         new_venv = self.venv.get()
-        rm_sym_link(sym_link=Path(getcwd()) / '.venv', mode=self.config.link_mode)
-        make_sym_link(to_path=Path(getcwd()) / '.venv', target=Path(new_venv), mode=self.config.link_mode, timer=self.config.timer)
+        sym_link = Path(getcwd()) / '.venv'
+        rm_sym_link(sym_link=sym_link, mode=self.config.link_mode)
+        make_sym_link(to_path=sym_link, target=Path(new_venv), mode=self.config.link_mode, timer=self.config.timer)
         self.update_status()
 
     def update_status(self):
