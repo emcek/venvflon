@@ -15,6 +15,9 @@ class LinkMode(Enum):
     PWSH7 = 'pwsh.exe'
 
 
+LINK_MODE_MAP = {0: LinkMode.PYTHON, 5: LinkMode.PWSH5, 7: LinkMode.PWSH7}
+
+
 def run_command(cmd: Sequence[str], cwd: Path | None = None) -> int:
     """
     Run command in shell as a subprocess.
@@ -29,6 +32,7 @@ def run_command(cmd: Sequence[str], cwd: Path | None = None) -> int:
     except CalledProcessError as e:
         print(f'Result: {e}')
         return -1
+
 
 def get_command_output(cmd: Sequence[str], cwd: Path | None = None) -> tuple[int, str, str]:
     """
