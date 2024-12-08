@@ -84,7 +84,7 @@ def rm_sym_link(sym_link: Path, mode: LinkMode = LinkMode.PWSH5) -> None:
         run_command(cmd=[mode.value, '-Command', ps_command])
 
 
-def venv_list_in(current_path: Path, max_depth: int = 1) -> Sequence[Path]:
+def venv_list_in(current_path: Path, max_depth: int = 1) -> list[Path]:
     """
     Find all virtual environments in a given path.
 

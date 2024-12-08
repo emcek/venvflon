@@ -14,7 +14,7 @@ import tkinter as tk
 __version__ = '0.4.0'
 
 
-def run():
+def run() -> None:
     """Run the main GUI."""
     parser = ArgumentParser(description='simple virtual environment switcher')
     parser.add_argument('-V', '--version', action='version', version='%(prog)s version: ' + __version__)

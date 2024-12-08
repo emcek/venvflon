@@ -51,7 +51,7 @@ class Gui(tk.Frame):
         self.cwd.bind('<Return>', self.refresh_cwd)
         self.add_venvs()
 
-    def add_venvs(self):
+    def add_venvs(self) -> None:
         """Add venvs as radio buttons to the GUI."""
         venv_label = tk.Label(self.master, text='venv:')
         venv_label.grid(row=1, column=0, sticky=tk.W)
@@ -65,12 +65,12 @@ class Gui(tk.Frame):
                 rb_venvs.grid(row=i, column=1, pady=0, padx=2, sticky=tk.W)
         self.status.grid(row=len(self.venv_list) + 5, column=0, columnspan=3, sticky=tk.W)
 
-    def _remove_old_radiobuttons(self):
+    def _remove_old_radiobuttons(self) -> None:
         """Remove old Radio buttons for venvs."""
         for venv_rb in self.frame.grid_slaves():
             venv_rb.destroy()
 
-    def _select_current_venv(self, venv_path: str):
+    def _select_current_venv(self, venv_path: str) -> None:
         """
         Select the radio button for venv which symlink point to.
 
@@ -80,19 +80,20 @@ class Gui(tk.Frame):
         if sym_link.exists() and sym_link.resolve().name in venv_path:
             self.venv.set(venv_path)
 
-    def refresh_cwd(self, *args):
+    def refresh_cwd(self, *args: tk.Event[tk.Entry]) -> None:
         """
         Refresh the current working directory.
 
         :param args: Internal tkinter arguments
         """
+        print(type(args[0]))
         new_cwd = Path(self.cwd_entry.get())
         chdir(new_cwd)
         self.master.title(f'venvflon - {new_cwd.name}')
         self.venv_list = venv_list_in(current_path=new_cwd)
         self.add_venvs()
 
-    def venv_selected(self):
+    def venv_selected(self) -> None:
         """Set the selected venv as the active one."""
         new_venv = self.venv.get()
         sym_link = Path(getcwd()) / '.venv'
@@ -100,7 +101,7 @@ class Gui(tk.Frame):
         make_sym_link(to_path=sym_link, target=Path(new_venv), mode=self.config.link_mode, timer=self.config.timer)
         self.update_status()
 
-    def update_status(self):
+    def update_status(self) -> None:
         """Update the status text."""
         _, err, out = get_command_output(cmd=[r'.venv\Scripts\python.exe', '-V'])
         if out:
