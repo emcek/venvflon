@@ -1,3 +1,7 @@
+## 0.3.3
+* Show output or error in statusbar
+* Fix handling cwd without any venv
+
 ## 0.3.2
 * fix parsing cli arguments
 * fix crashing when starting
