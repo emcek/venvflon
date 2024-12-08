@@ -59,7 +59,9 @@ class Gui(tk.Frame):
         if len(self.venv_list):
             self.frame.grid(row=1, column=1, columnspan=2, padx=2, pady=2, rowspan=len(self.venv_list))
             for i, text in enumerate(self.venv_list, 1):
-                rb_venvs = tk.Radiobutton(master=self.frame, text=str(text), variable=self.venv, value=text, command=self.venv_selected)
+                rb_venvs = tk.Radiobutton(master=self.frame, text=str(text), variable=self.venv, value=text)
+                self._select_current_venv(venv_path=str(text))
+                rb_venvs.configure(command=self.venv_selected)
                 rb_venvs.grid(row=i, column=1, pady=0, padx=2, sticky=tk.W)
         self.status.grid(row=len(self.venv_list) + 5, column=0, columnspan=3, sticky=tk.W)
 
@@ -67,6 +69,16 @@ class Gui(tk.Frame):
         """Remove old Radio buttons for venvs."""
         for venv_rb in self.frame.grid_slaves():
             venv_rb.destroy()
+
+    def _select_current_venv(self, venv_path: str):
+        """
+        Select the radio button for venv which symlink point to.
+
+        :param venv_path: Path to the venv as string
+        """
+        sym_link = Path(getcwd()) / '.venv'
+        if sym_link.exists() and sym_link.resolve().name in venv_path:
+            self.venv.set(venv_path)
 
     def refresh_cwd(self, *args):
         """
