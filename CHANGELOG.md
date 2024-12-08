@@ -1,5 +1,5 @@
 ## 0.3.2
-* fix parsing cli arguments 
+* fix parsing cli arguments
 * fix crashing when starting
 
 ## 0.3.1
