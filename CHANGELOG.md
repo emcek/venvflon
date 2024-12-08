@@ -1,3 +1,6 @@
+## 0.4.0
+* Select at the start current venv which symlink point to
+
 ## 0.3.3
 * Show output or error in statusbar
 * Fix handling cwd without any venv
