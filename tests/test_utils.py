@@ -20,10 +20,17 @@ def test_get_command_output_success():
     assert 'Python 3.' in out
 
 
-def test_get_command_output_failure():
+def test_get_command_output_call_process_error():
     rc, err, out = utils.get_command_output(cmd=['python', '-fake'])
     assert rc == 2
     assert 'Unknown option: -f' in err
+    assert out == ''
+
+
+def test_get_command_output_file_not_found_error():
+    rc, err, out = utils.get_command_output(cmd=['fake', '-fake'])
+    assert rc == 255
+    assert err == 'None of venv were detected'
     assert out == ''
 
 
