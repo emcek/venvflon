@@ -114,7 +114,6 @@ max-complexity = 5
 html_report = 'mypyhtml'
 exclude = [
     'tests/',
-    'generate_ver_file\.py$',
 ]
 
 [tool.isort]
@@ -123,6 +122,6 @@ line_length = 160
 [tool.uv]
 dev-dependencies = [
     'venvflon[test]',
+    'build',
     'pre-commit',
-    'pyinstaller',
 ]
