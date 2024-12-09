@@ -58,7 +58,7 @@ test = [
 ]
 
 [tool.setuptools.dynamic]
-version = {attr = 'venvflon.run.__version__'}
+version = {attr = 'venvflon.flon.__version__'}
 
 [tool.setuptools.packages.find]
 where = ['src/']

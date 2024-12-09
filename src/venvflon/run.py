@@ -5,15 +5,13 @@ from os import environ
 from pathlib import Path
 from sys import base_prefix
 
-from venvflon.flon import Gui
+from venvflon.flon import Gui, __version__
 
 environ['TCL_LIBRARY'] = str(Path(base_prefix) / 'tcl' / 'tcl8.6')
 environ['TK_LIBRARY'] = str(Path(base_prefix) / 'tcl' / 'tk8.6')
 import tkinter as tk
 
 from tkinterdnd2 import TkinterDnD
-
-__version__ = '0.4.1'
 
 
 def run() -> None:

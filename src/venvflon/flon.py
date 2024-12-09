@@ -13,6 +13,8 @@ environ['TCL_LIBRARY'] = str(Path(base_prefix) / 'tcl' / 'tcl8.6')
 environ['TK_LIBRARY'] = str(Path(base_prefix) / 'tcl' / 'tk8.6')
 import tkinter as tk
 
+__version__ = '0.5.0'
+
 
 class Gui(tk.Frame):
     """Tkinter GUI for venvflon."""
@@ -119,6 +121,6 @@ class Gui(tk.Frame):
         """Update the status text."""
         _, err, out = utils.get_command_output(cmd=[r'.venv\Scripts\python.exe', '-V'])
         if out:
-            self.status_txt.set(f'Current: {out.strip()}')
+            self.status_txt.set(f'v{__version__}   /   Current: {out.strip()}')
         elif err:
-            self.status_txt.set(f'Error: {err.strip()}')
+            self.status_txt.set(f'v{__version__}   /   Error: {err.strip()}')
