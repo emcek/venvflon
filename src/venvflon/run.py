@@ -11,6 +11,8 @@ environ['TCL_LIBRARY'] = str(Path(base_prefix) / 'tcl' / 'tcl8.6')
 environ['TK_LIBRARY'] = str(Path(base_prefix) / 'tcl' / 'tk8.6')
 import tkinter as tk
 
+from tkinterdnd2 import TkinterDnD
+
 __version__ = '0.4.1'
 
 
@@ -24,7 +26,7 @@ def run() -> None:
                         help='sleep time (in seconds) for pwsh5 and pwsh7')
     args = parser.parse_args()
 
-    root_tk = tk.Tk()
+    root_tk = TkinterDnD.Tk()
     width, height = 300, 150
     root_tk.title(f'venvflon - v{__version__}')
     root_tk.geometry(f'{width}x{height}')

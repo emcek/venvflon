@@ -5,6 +5,8 @@ from os import chdir, environ, getcwd
 from pathlib import Path
 from sys import base_prefix
 
+from tkinterdnd2 import DND_FILES, TkinterDnD
+
 from venvflon import utils
 
 environ['TCL_LIBRARY'] = str(Path(base_prefix) / 'tcl' / 'tcl8.6')
@@ -39,6 +41,7 @@ class Gui(tk.Frame):
         self.frame = tk.Frame(master=self.master, relief=tk.GROOVE, borderwidth=2)
         self.status = tk.Label(master=self.master, textvariable=self.status_txt)
         self.cwd = tk.Entry(master=self.master, textvariable=self.cwd_entry, width=venv_txt_length + 2)
+        self.cwd.drop_target_register(DND_FILES)   # type: ignore[attr-defined]
         self.init_widgets()
 
     def init_widgets(self) -> None:
@@ -48,6 +51,7 @@ class Gui(tk.Frame):
         cwd_label.grid(row=0, column=0, sticky=tk.W)
         self.cwd.grid(row=0, column=1, sticky=tk.W)
         self.cwd.bind('<Return>', self.refresh_cwd)
+        self.cwd.dnd_bind('<<Drop>>', self.drop_in_cwd)  # type: ignore[attr-defined]
         self.add_venvs()
 
     def add_venvs(self) -> None:
@@ -87,10 +91,21 @@ class Gui(tk.Frame):
         :param args: Internal tkinter arguments
         """
         new_cwd = Path(self.cwd_entry.get())
+        self.cwd.configure(width=len(str(new_cwd)))
         chdir(new_cwd)
         self.master.title(f'venvflon - {new_cwd.name}')
         self.venv_list = utils.venv_list_in(current_path=new_cwd)
         self.add_venvs()
+
+    def drop_in_cwd(self, event: TkinterDnD.DnDEvent) -> None:
+        """
+        Insert dropped directory into cwd entry.
+
+        :param event: Drop and Drag event
+        """
+        self.cwd.delete(0, tk.END)
+        self.cwd.insert(tk.END, event.data)
+        self.refresh_cwd()
 
     def venv_selected(self) -> None:
         """Set the selected venv as the active one."""
