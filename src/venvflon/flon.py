@@ -35,40 +35,35 @@ class Gui(tk.Frame):
         self.cwd_entry = tk.StringVar()
         self.cwd_entry.set(getcwd())
         self.venv_list = utils.venv_list_in(current_path=Path(getcwd()))
-        venv_txt_length = 30 if not len(self.venv_list) else len(str(self.venv_list[0]))
-        venv_txt_height = 2 if not len(self.venv_list) else len(self.venv_list)
-        new_width, new_height = venv_txt_length + 300, venv_txt_height * 55
-        self.master.geometry(f'{new_width}x{new_height}')
-        self.master.minsize(width=new_width, height=new_height)
         self.frame = tk.Frame(master=self.master, relief=tk.GROOVE, borderwidth=2)
         self.status = tk.Label(master=self.master, textvariable=self.status_txt)
-        self.cwd = tk.Entry(master=self.master, textvariable=self.cwd_entry, width=venv_txt_length + 2)
+        self.cwd = tk.Entry(master=self.master, textvariable=self.cwd_entry, width=20, relief=tk.SUNKEN, font=('Arial', 9))
+        self.frame = tk.Frame(master=self.master, relief=tk.GROOVE, borderwidth=2, bg='white')
+        self.status = tk.Label(master=self.master, textvariable=self.status_txt, font=('Arial', 9, 'italic'))
         self.cwd.drop_target_register(DND_FILES)   # type: ignore[attr-defined]
         self.init_widgets()
 
     def init_widgets(self) -> None:
         """Initialize widgets."""
-        self.master.columnconfigure(index=0, weight=1)
-        cwd_label = tk.Label(self.master, text='cwd:')
-        cwd_label.grid(row=0, column=0, sticky=tk.W)
-        self.cwd.grid(row=0, column=1, sticky=tk.W)
+        cwd_label = tk.Label(self.master, text='cwd:', font=('Arial', 9))
+        cwd_label.grid(row=0, column=0, sticky=tk.W, padx=5, pady=5)
+        self.cwd.grid(row=0, column=1, sticky=tk.W, padx=5, pady=5)
         self.cwd.bind('<Return>', self.refresh_cwd)
         self.cwd.dnd_bind('<<Drop>>', self.drop_in_cwd)  # type: ignore[attr-defined]
         self.add_venvs()
+        self.resize_window()
 
     def add_venvs(self) -> None:
         """Add venvs as radio buttons to the GUI."""
-        venv_label = tk.Label(self.master, text='venv:')
-        venv_label.grid(row=1, column=0, sticky=tk.W)
         self._remove_old_radiobuttons()
         if len(self.venv_list):
-            self.frame.grid(row=1, column=1, columnspan=2, padx=2, pady=2, rowspan=len(self.venv_list))
+            self.frame.grid(row=2, column=0, columnspan=3, padx=5, pady=5, sticky=tk.W)
             for i, text in enumerate(self.venv_list, 1):
-                rb_venvs = tk.Radiobutton(master=self.frame, text=str(text), variable=self.venv, value=text)
+                rb_venvs = tk.Radiobutton(master=self.frame, text=str(text), variable=self.venv, value=text, bg='white', font=('Arial', 9), anchor=tk.W, justify=tk.LEFT)
                 self._select_current_venv(venv_path=str(text))
                 rb_venvs.configure(command=self.venv_selected)
                 rb_venvs.grid(row=i, column=1, pady=0, padx=2, sticky=tk.W)
-        self.status.grid(row=len(self.venv_list) + 5, column=0, columnspan=3, sticky=tk.W)
+        self.status.grid(row=3, column=0, columnspan=3, sticky=tk.W, padx=5, pady=10)
         self.update_status()
 
     def _remove_old_radiobuttons(self) -> None:
@@ -98,6 +93,7 @@ class Gui(tk.Frame):
         self.master.title(f'venvflon - {new_cwd.name}')
         self.venv_list = utils.venv_list_in(current_path=new_cwd)
         self.add_venvs()
+        self.resize_window()
 
     def drop_in_cwd(self, event: TkinterDnD.DnDEvent) -> None:
         """
@@ -116,6 +112,15 @@ class Gui(tk.Frame):
         utils.rm_sym_link(sym_link=sym_link, mode=self.config.link_mode)
         utils.make_sym_link(to_path=sym_link, target=Path(new_venv), mode=self.config.link_mode, timer=self.config.timer)
         self.update_status()
+
+    def resize_window(self) -> None:
+        """Resize the window based on the venv list length."""
+        venv_txt_length = 30 if not len(self.venv_list) else len(str(self.venv_list[0]))
+        venv_txt_height = 2 if not len(self.venv_list) else len(self.venv_list)
+        new_width, new_height = venv_txt_length + 300, venv_txt_height * 55 + 17
+        self.cwd.configure(width=len(self.cwd_entry.get()))
+        self.master.geometry(f'{new_width}x{new_height}')
+        self.master.minsize(width=new_width, height=new_height)
 
     def update_status(self) -> None:
         """Update the status text."""
