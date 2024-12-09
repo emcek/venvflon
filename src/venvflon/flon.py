@@ -59,7 +59,8 @@ class Gui(tk.Frame):
         if len(self.venv_list):
             self.frame.grid(row=2, column=0, columnspan=3, padx=5, pady=5, sticky=tk.W)
             for i, text in enumerate(self.venv_list, 1):
-                rb_venvs = tk.Radiobutton(master=self.frame, text=str(text), variable=self.venv, value=text, bg='white', font=('Arial', 9), anchor=tk.W, justify=tk.LEFT)
+                rb_venvs = tk.Radiobutton(master=self.frame, text=str(text), variable=self.venv, value=text,
+                                          bg='white', font=('Arial', 9), anchor=tk.W, justify=tk.LEFT)
                 self._select_current_venv(venv_path=str(text))
                 rb_venvs.configure(command=self.venv_selected)
                 rb_venvs.grid(row=i, column=1, pady=0, padx=2, sticky=tk.W)
