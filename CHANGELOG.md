@@ -1,6 +1,6 @@
 ## 0.5.0
 * add drag and drop to cwd entry
-* make flon more nicer
+* make flon GUI more nicer
 
 ## 0.4.1
 * Update statusbar when change cwd
