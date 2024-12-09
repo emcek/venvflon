@@ -108,9 +108,7 @@ extend-exclude = [
 max-complexity = 5
 
 [tool.mypy]
-#ignore_missing_imports = true
-#no_warn_no_return = true
-#check_untyped_defs = true
+ignore_missing_imports = true
 html_report = 'mypyhtml'
 exclude = [
     'tests/',
