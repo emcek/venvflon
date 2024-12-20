@@ -79,13 +79,14 @@ def rm_sym_link(sym_link: Path, mode: LinkMode = LinkMode.PWSH5) -> None:
     :param sym_link: Path to a symbolic link
     :param mode: How to remove a symbolic link
     """
-    if mode == LinkMode.PYTHON:
-        sym_link.unlink(missing_ok=True)
-    else:
-        rm_symlink = f"(Get-Item '{sym_link}').Delete()"
-        ps_command = f'Start-Process {mode.value} -ArgumentList "-Command {rm_symlink}" -Verb RunAs'
-        print(f'Execute: {ps_command}')
-        run_command(cmd=[mode.value, '-Command', ps_command])
+    if sym_link.exists():
+        if mode == LinkMode.PYTHON:
+            sym_link.unlink(missing_ok=True)
+        else:
+            rm_symlink = f"(Get-Item '{sym_link}').Delete()"
+            ps_command = f'Start-Process {mode.value} -ArgumentList "-Command {rm_symlink}" -Verb RunAs'
+            print(f'Execute: {ps_command}')
+            run_command(cmd=[mode.value, '-Command', ps_command])
 
 
 def venv_list_in(current_path: Path, max_depth: int = 1) -> list[Path]:
