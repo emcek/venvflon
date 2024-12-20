@@ -14,7 +14,7 @@ simple virtual environment switcher
 Comes from polish `wenflon` or `kaniula` (eng. `cannula`)
 
 ## installation
-The preferred way of installing using [uv](https://github.com/astral-sh/uv) tool:
+The preferred way of installing using [uv](https://github.com/astral-sh/uv) (v0.5.11 or newer) tool:
 ``` console
 uv tool install --python 3.13.1 venvflon
 ```
