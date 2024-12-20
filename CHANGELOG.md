@@ -1,3 +1,6 @@
+## 0.5.1
+* Manually include Tkinter libraries is not needed
+
 ## 0.5.0
 * add drag and drop to cwd entry
 * make flon GUI more nicer
