@@ -1,17 +1,12 @@
 from __future__ import annotations
 
-from argparse import ArgumentParser
-from os import environ
-from pathlib import Path
-from sys import base_prefix
-
-from venvflon.flon import Gui, __version__
-
-environ['TCL_LIBRARY'] = str(Path(base_prefix) / 'tcl' / 'tcl8.6')
-environ['TK_LIBRARY'] = str(Path(base_prefix) / 'tcl' / 'tk8.6')
 import tkinter as tk
+from argparse import ArgumentParser
+from pathlib import Path
 
 from tkinterdnd2 import TkinterDnD
+
+from venvflon.flon import Gui, __version__
 
 
 def run() -> None:

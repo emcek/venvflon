@@ -1,17 +1,13 @@
 from __future__ import annotations
 
+import tkinter as tk
 from argparse import Namespace
-from os import chdir, environ, getcwd
+from os import chdir, getcwd
 from pathlib import Path
-from sys import base_prefix
 
 from tkinterdnd2 import DND_FILES, TkinterDnD
 
 from venvflon import utils
-
-environ['TCL_LIBRARY'] = str(Path(base_prefix) / 'tcl' / 'tcl8.6')
-environ['TK_LIBRARY'] = str(Path(base_prefix) / 'tcl' / 'tk8.6')
-import tkinter as tk
 
 __version__ = '0.5.0'
 
