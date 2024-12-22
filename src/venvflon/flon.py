@@ -17,7 +17,7 @@ class Gui(tk.Frame):
 
     def __init__(self, master: tk.Tk, cli_args: Namespace) -> None:
         """
-        Tkinter  GUI for venvflon.
+        Tkinter GUI for venvflon.
 
         :param master: Tkinter root
         :param cli_args: CLI arguments
@@ -31,19 +31,21 @@ class Gui(tk.Frame):
         self.cwd_entry = tk.StringVar()
         self.cwd_entry.set(getcwd())
         self.venv_list = utils.venv_list_in(current_path=Path(getcwd()))
-        self.frame = tk.Frame(master=self.master, relief=tk.GROOVE, borderwidth=2)
-        self.status = tk.Label(master=self.master, textvariable=self.status_txt)
-        self.cwd = tk.Entry(master=self.master, textvariable=self.cwd_entry, width=20, relief=tk.SUNKEN, font=('Arial', 9))
+
+        self.master.columnconfigure(1, weight=1)
+        self.master.rowconfigure(2, weight=1)
+
         self.frame = tk.Frame(master=self.master, relief=tk.GROOVE, borderwidth=2, bg='white')
         self.status = tk.Label(master=self.master, textvariable=self.status_txt, font=('Arial', 9, 'italic'))
-        self.cwd.drop_target_register(DND_FILES)   # type: ignore[attr-defined]
+        self.cwd = tk.Entry(master=self.master, textvariable=self.cwd_entry, width=20, relief=tk.SUNKEN, font=('Arial', 9))
+        self.cwd.drop_target_register(DND_FILES)  # type: ignore[attr-defined]
         self.init_widgets()
 
     def init_widgets(self) -> None:
         """Initialize widgets."""
         cwd_label = tk.Label(self.master, text='cwd:', font=('Arial', 9))
         cwd_label.grid(row=0, column=0, sticky=tk.W, padx=5, pady=5)
-        self.cwd.grid(row=0, column=1, sticky=tk.W, padx=5, pady=5)
+        self.cwd.grid(row=0, column=1, sticky=tk.EW, padx=5, pady=5)
         self.cwd.bind('<Return>', self.refresh_cwd)
         self.cwd.dnd_bind('<<Drop>>', self.drop_in_cwd)  # type: ignore[attr-defined]
         self.add_venvs()
@@ -53,7 +55,8 @@ class Gui(tk.Frame):
         """Add venvs as radio buttons to the GUI."""
         self._remove_old_radiobuttons()
         if len(self.venv_list):
-            self.frame.grid(row=2, column=0, columnspan=3, padx=5, pady=5, sticky=tk.W)
+            self.frame.grid(row=2, column=0, columnspan=3, padx=5, pady=5, sticky=tk.NSEW)
+            self.frame.columnconfigure(1, weight=1)
             for i, text in enumerate(self.venv_list, 1):
                 rb_venvs = tk.Radiobutton(master=self.frame, text=str(text), variable=self.venv, value=text,
                                           bg='white', font=('Arial', 9), anchor=tk.W, justify=tk.LEFT)
@@ -112,9 +115,10 @@ class Gui(tk.Frame):
 
     def resize_window(self) -> None:
         """Resize the window based on the venv list length."""
+        self.master.update_idletasks()
         venv_txt_length = 30 if not len(self.venv_list) else len(str(self.venv_list[0]))
         venv_txt_height = 2 if not len(self.venv_list) else len(self.venv_list)
-        new_width, new_height = venv_txt_length + 300, venv_txt_height * 55 + 17
+        new_width, new_height = venv_txt_length + 220, venv_txt_height * 60 + 17
         self.cwd.configure(width=len(self.cwd_entry.get()))
         self.master.geometry(f'{new_width}x{new_height}')
         self.master.minsize(width=new_width, height=new_height)
