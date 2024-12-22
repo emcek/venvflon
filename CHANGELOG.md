@@ -1,3 +1,6 @@
+## 0.6.0
+* resize widgets with mian window
+
 ## 0.5.1
 * Manually include Tkinter libraries is not needed
 * Remove a symbolic link only when it exists
