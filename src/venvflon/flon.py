@@ -5,6 +5,7 @@ from argparse import Namespace
 from os import chdir, getcwd
 from pathlib import Path
 
+import yaml
 from tkinterdnd2 import DND_FILES, TkinterDnD
 
 from venvflon import utils
@@ -31,23 +32,24 @@ class Gui(tk.Frame):
         self.cwd_entry = tk.StringVar()
         self.cwd_entry.set(getcwd())
         self.venv_list = utils.venv_list_in(current_path=Path(getcwd()))
-
         self.master.columnconfigure(1, weight=1)
         self.master.rowconfigure(2, weight=1)
-
         self.frame = tk.Frame(master=self.master, relief=tk.GROOVE, borderwidth=2, bg='white')
         self.status = tk.Label(master=self.master, textvariable=self.status_txt, font=('Arial', 9, 'italic'))
         self.cwd = tk.Entry(master=self.master, textvariable=self.cwd_entry, width=20, relief=tk.SUNKEN, font=('Arial', 9))
-        self.cwd.drop_target_register(DND_FILES)  # type: ignore[attr-defined]
+        self.btn_sync = tk.Button(master=self.master, text='Sync', command=self.sync, font=('Arial', 9))
         self.init_widgets()
 
     def init_widgets(self) -> None:
         """Initialize widgets."""
+        self.cwd.drop_target_register(DND_FILES)  # type: ignore[attr-defined]
         cwd_label = tk.Label(self.master, text='cwd:', font=('Arial', 9))
         cwd_label.grid(row=0, column=0, sticky=tk.W, padx=5, pady=5)
         self.cwd.grid(row=0, column=1, sticky=tk.EW, padx=5, pady=5)
         self.cwd.bind('<Return>', self.refresh_cwd)
         self.cwd.dnd_bind('<<Drop>>', self.drop_in_cwd)  # type: ignore[attr-defined]
+        self.btn_sync.grid(row=3, column=1, sticky=tk.EW, padx=5, pady=5)
+        self.sync_btn_state()
         self.add_venvs()
         self.resize_window()
 
@@ -63,7 +65,7 @@ class Gui(tk.Frame):
                 self._select_current_venv(venv_path=str(text))
                 rb_venvs.configure(command=self.venv_selected)
                 rb_venvs.grid(row=i, column=1, pady=0, padx=2, sticky=tk.W)
-        self.status.grid(row=3, column=0, columnspan=3, sticky=tk.W, padx=5, pady=10)
+        self.status.grid(row=4, column=0, columnspan=3, sticky=tk.W, padx=5, pady=10)
         self.update_status()
 
     def _remove_old_radiobuttons(self) -> None:
@@ -93,6 +95,7 @@ class Gui(tk.Frame):
         self.master.title(f'venvflon - {new_cwd.name}')
         self.venv_list = utils.venv_list_in(current_path=new_cwd)
         self.add_venvs()
+        self.sync_btn_state()
         self.resize_window()
 
     def drop_in_cwd(self, event: TkinterDnD.DnDEvent) -> None:
@@ -104,6 +107,16 @@ class Gui(tk.Frame):
         self.cwd.delete(0, tk.END)
         self.cwd.insert(tk.END, event.data)
         self.refresh_cwd()
+
+    def sync(self) -> None:
+        """Run sync command from configuration YAML."""
+        with open(file='.venvflon.yaml', encoding='utf-8') as yaml_file:
+            data = yaml.load(yaml_file, Loader=yaml.SafeLoader)
+        for cmd in data['sync_cmd']:
+            _, err, _ = utils.get_command_output(cmd=cmd.split(' '))
+            parsed_lines = [line for line in err.split('\n') if 'Resolved' in line or 'Installed' in line or 'Audited' in line]
+            print(' '.join(parsed_lines))
+            self.btn_sync.configure(text='Sync (Done)')
 
     def venv_selected(self) -> None:
         """Set the selected venv as the active one."""
@@ -130,3 +143,10 @@ class Gui(tk.Frame):
             self.status_txt.set(f'v{__version__}   /   Current: {out.strip()}')
         elif err:
             self.status_txt.set(f'v{__version__}   /   Error: {err.strip()}')
+
+    def sync_btn_state(self) -> None:
+        """Check if config YAML file exists and change button status."""
+        if Path(getcwd(), '.venvflon.yaml').exists():
+            self.btn_sync.configure(state=tk.ACTIVE)
+        else:
+            self.btn_sync.configure(state=tk.DISABLED)
