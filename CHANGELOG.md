@@ -1,4 +1,5 @@
 ## 0.6.0
+* add button to sync venv based on `.venvflon.yaml'
 * resize widgets with mian window
 
 ## 0.5.1
