@@ -30,6 +30,7 @@ keywords = [
 ]
 dynamic = ['version']
 dependencies = [
+    'pyyaml==6.0.2',
     'tkinterdnd2==0.4.2',
 ]
 [project.urls]
@@ -49,12 +50,13 @@ test = [
     'interrogate==1.7.0',
     'isort==5.13.2',
     'lxml==5.3.0',
-    'mypy==1.13.0',
+    'mypy==1.14.0',
     'packaging==24.2',
     'pip-audit==2.7.3',
     'pytest==8.3.4',
     'pytest-randomly==3.16.0',
-    'ruff==0.8.2',
+    'ruff==0.8.4',
+    'types-pyyaml==6.0.12.20241221',
 ]
 
 [tool.setuptools.dynamic]
