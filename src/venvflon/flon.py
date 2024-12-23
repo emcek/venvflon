@@ -10,7 +10,7 @@ from tkinterdnd2 import DND_FILES, TkinterDnD
 
 from venvflon import utils
 
-__version__ = '0.5.1'
+__version__ = '0.6.0'
 
 
 class Gui(tk.Frame):

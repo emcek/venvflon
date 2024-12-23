@@ -1,5 +1,5 @@
 [![Python CI](https://github.com/emcek/venvflon/actions/workflows/python-ci.yml/badge.svg?branch=master)](https://github.com/emcek/venvflon/actions/workflows/python-ci.yml)
-[![image](https://img.shields.io/badge/pypi-v0.5.1-blue.svg)](https://pypi.org/project/venvflon/)
+[![image](https://img.shields.io/badge/pypi-v0.6.0-blue.svg)](https://pypi.org/project/venvflon/)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/emcek/venvflon/master.svg)](https://results.pre-commit.ci/latest/github/emcek/venvflon/master)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 [![Downloads](https://img.shields.io/github/downloads/emcek/venvflon/total?label=Downloads)](https://github.com/emcek/venvflon/releases)
