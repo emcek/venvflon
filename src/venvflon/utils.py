@@ -4,6 +4,7 @@ from collections.abc import Sequence
 from enum import Enum
 from os import sep, walk
 from pathlib import Path
+from re import search
 from subprocess import CalledProcessError, run
 from time import sleep
 
@@ -105,3 +106,19 @@ def venv_list_in(current_path: Path, max_depth: int = 1) -> list[Path]:
         if dir_path.count(sep) - str(current_path).count(sep) == max_depth - 1:
             del dir_names[:]
     return result
+
+
+def extract_time(entry: str) -> float:
+    """
+    Extracts a time value from a given text entry, converting it to milliseconds.
+
+    Returns 0.0 if no valid time value is found in the input.
+
+    :param entry: The input text from which to extract the time value.
+    :return: The extracted time value in milliseconds.
+    """
+    if match:= search(r'(\d+(?:\.\d+)?)(ms|s)', entry):
+        value, unit = match.groups()
+        value = float(value)
+        return value * 1000 if unit == 's' else value
+    return 0.0
