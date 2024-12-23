@@ -20,7 +20,7 @@ def run() -> None:
     args = parser.parse_args()
 
     root_tk = TkinterDnD.Tk()
-    width, height = 300, 150
+    width, height = 300, 250
     root_tk.title(f'venvflon - v{__version__}')
     root_tk.geometry(f'{width}x{height}')
     root_tk.iconphoto(False, tk.PhotoImage(file=Path(__file__).parent / 'img' / 'cannula_64.png'))

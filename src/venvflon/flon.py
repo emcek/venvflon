@@ -51,7 +51,6 @@ class Gui(tk.Frame):
         self.btn_sync.grid(row=3, column=1, sticky=tk.EW, padx=5, pady=5)
         self.sync_btn_state()
         self.add_venvs()
-        self.resize_window()
 
     def add_venvs(self) -> None:
         """Add venvs as radio buttons to the GUI."""
@@ -96,7 +95,6 @@ class Gui(tk.Frame):
         self.venv_list = utils.venv_list_in(current_path=new_cwd)
         self.add_venvs()
         self.sync_btn_state()
-        self.resize_window()
 
     def drop_in_cwd(self, event: TkinterDnD.DnDEvent) -> None:
         """
@@ -105,8 +103,7 @@ class Gui(tk.Frame):
         :param event: Drop and Drag event
         """
         self.cwd.delete(0, tk.END)
-        self.cwd.insert(tk.END, event.data)
-        self.refresh_cwd()
+        self.cwd.insert(tk.END, event.data); self.refresh_cwd()
 
     def sync(self) -> None:
         """Run sync command from configuration YAML."""
@@ -131,16 +128,6 @@ class Gui(tk.Frame):
         utils.rm_sym_link(sym_link=sym_link, mode=self.config.link_mode)
         utils.make_sym_link(to_path=sym_link, target=Path(new_venv), mode=self.config.link_mode, timer=self.config.timer)
         self.update_status()
-
-    def resize_window(self) -> None:
-        """Resize the window based on the venv list length."""
-        self.master.update_idletasks()
-        venv_txt_length = 30 if not len(self.venv_list) else len(str(self.venv_list[0]))
-        venv_txt_height = 2 if not len(self.venv_list) else len(self.venv_list)
-        new_width, new_height = venv_txt_length + 220, venv_txt_height * 60 + 17
-        self.cwd.configure(width=len(self.cwd_entry.get()))
-        self.master.geometry(f'{new_width}x{new_height}')
-        self.master.minsize(width=new_width, height=new_height)
 
     def update_status(self) -> None:
         """Update the status text."""
