@@ -112,11 +112,17 @@ class Gui(tk.Frame):
         """Run sync command from configuration YAML."""
         with open(file='.venvflon.yaml', encoding='utf-8') as yaml_file:
             data = yaml.load(yaml_file, Loader=yaml.SafeLoader)
+        all_out = []
         for cmd in data['sync_cmd']:
             _, err, _ = utils.get_command_output(cmd=cmd.split(' '))
             parsed_lines = [line for line in err.split('\n') if 'Resolved' in line or 'Installed' in line or 'Audited' in line]
-            print(' '.join(parsed_lines))
-            self.btn_sync.configure(text='Sync (Done)')
+            all_out.extend(parsed_lines)
+        total_time_ms = sum(utils.extract_time(entry=entry) for entry in all_out)
+        if total_time_ms > 1000:
+            t = f'{total_time_ms / 1000:.2f} s'
+        else:
+            t = f'{total_time_ms:.2f} ms'
+        self.btn_sync.configure(text=f'Sync ({t})')
 
     def venv_selected(self) -> None:
         """Set the selected venv as the active one."""
