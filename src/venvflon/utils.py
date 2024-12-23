@@ -110,7 +110,7 @@ def venv_list_in(current_path: Path, max_depth: int = 1) -> list[Path]:
 
 def extract_time(entry: str) -> float:
     """
-    Extracts a time value from a given text entry, converting it to milliseconds.
+    Extract a time value from a given text entry, converting it to milliseconds.
 
     Returns 0.0 if no valid time value is found in the input.
 

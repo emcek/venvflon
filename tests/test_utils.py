@@ -66,7 +66,7 @@ def test_failure_venv_list_in(resources):
     assert len(venvs) == 0
 
 
-@mark.parametrize("entry, expected", [
+@mark.parametrize('entry, expected', [
     ('2s', 2000.0),
     ('2.5s', 2500.0),
     ('150ms', 150.0),
