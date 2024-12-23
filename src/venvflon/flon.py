@@ -34,7 +34,7 @@ class Gui(tk.Frame):
         self.venv_list = utils.venv_list_in(current_path=Path(getcwd()))
         self.master.columnconfigure(1, weight=1)
         self.master.rowconfigure(2, weight=1)
-        self.frame = tk.Frame(master=self.master, relief=tk.GROOVE, borderwidth=2, bg='white')
+        self.frame = tk.Frame(master=self.master, relief=tk.GROOVE, borderwidth=2)
         self.status = tk.Label(master=self.master, textvariable=self.status_txt, font=('Arial', 9, 'italic'))
         self.cwd = tk.Entry(master=self.master, textvariable=self.cwd_entry, width=20, relief=tk.SUNKEN, font=('Arial', 9))
         self.btn_sync = tk.Button(master=self.master, text='Sync', command=self.sync, font=('Arial', 9))
@@ -60,7 +60,7 @@ class Gui(tk.Frame):
             self.frame.columnconfigure(1, weight=1)
             for i, text in enumerate(self.venv_list, 1):
                 rb_venvs = tk.Radiobutton(master=self.frame, text=str(text), variable=self.venv, value=text,
-                                          bg='white', font=('Arial', 9), anchor=tk.W, justify=tk.LEFT)
+                                          font=('Arial', 9), anchor=tk.W, justify=tk.LEFT)
                 self._select_current_venv(venv_path=str(text))
                 rb_venvs.configure(command=self.venv_selected)
                 rb_venvs.grid(row=i, column=1, pady=0, padx=2, sticky=tk.W)
