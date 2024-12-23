@@ -151,7 +151,7 @@ class Gui(tk.Frame):
             self.status_txt.set(f'v{__version__}   /   Error: {err.strip()}')
 
     def sync_btn_state(self) -> None:
-        """Check if config YAML file exists and change button status."""
+        """Check if a config YAML file exists and change a button status."""
         if Path(getcwd(), '.venvflon.yaml').exists():
             self.btn_sync.configure(state=tk.ACTIVE)
         else:
