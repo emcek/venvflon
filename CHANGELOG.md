@@ -1,5 +1,6 @@
 ## 0.6.0
 * add button to sync venv based on `.venvflon.yaml'
+* Show total time of synchronization on button itself
 * resize widgets with mian window
 
 ## 0.5.1
