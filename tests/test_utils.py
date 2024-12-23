@@ -13,6 +13,7 @@ def test_run_command(cmd, result):
     rc = utils.run_command(cmd=['powershell', cmd])
     assert rc == result
 
+
 def test_get_command_output_success():
     rc, err, out = utils.get_command_output(cmd=['python', '-V', '-V'])
     assert rc == 0
@@ -63,3 +64,16 @@ def test_success_deep_2_venv_list_in(resources):
 def test_failure_venv_list_in(resources):
     venvs = utils.venv_list_in(current_path=resources / '.venv10', max_depth=1)
     assert len(venvs) == 0
+
+
+@mark.parametrize("entry, expected", [
+    ('2s', 2000.0),
+    ('2.5s', 2500.0),
+    ('150ms', 150.0),
+    ('0.5s', 500.0),
+    ('0s', 0.0),
+    ('0ms', 0.0),
+    ('not time at all', 0.0),
+])
+def test_extract_time_valid_values(entry, expected):
+    assert utils.extract_time(entry=entry) == expected
