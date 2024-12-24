@@ -103,7 +103,8 @@ class Gui(tk.Frame):
         :param event: Drop and Drag event
         """
         self.cwd.delete(0, tk.END)
-        self.cwd.insert(tk.END, event.data); self.refresh_cwd()
+        self.cwd.insert(tk.END, event.data)
+        self.refresh_cwd()
 
     def sync(self) -> None:
         """Run sync command from configuration YAML."""
