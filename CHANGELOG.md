@@ -1,3 +1,6 @@
+## 0.6.1
+* Make window bigger at start
+
 ## 0.6.0
 * add button to sync venv based on `.venvflon.yaml'
 * Show total time of synchronization on button itself
