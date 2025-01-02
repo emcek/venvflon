@@ -56,7 +56,7 @@ test = [
     'pytest==8.3.4',
     'pytest-randomly==3.16.0',
     'ruff==0.8.4',
-    'types-pyyaml==6.0.12.20241221',
+    'types-pyyaml==6.0.12.20241230',
 ]
 
 [tool.setuptools.dynamic]
