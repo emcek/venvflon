@@ -126,7 +126,8 @@ def extract_time(entry: str) -> float:
 
 def extract_installed_packages(entry: Sequence[str]) -> int:
     """
-    Extracts the number of installed packages from a sequence of strings.
+    Extract the number of installed packages from a sequence of strings.
+
     The method searches each string in the sequence for a pattern that matches
     an indication of installed packages and then retrieves the number if found.
     The method stops processing once it finds the first valid match.
