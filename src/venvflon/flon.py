@@ -11,6 +11,7 @@ from tkinterdnd2 import DND_FILES, TkinterDnD
 from venvflon import utils
 
 __version__ = '0.6.1'
+KEYWORDS = ('Resolved', 'Installed', 'Audited', 'Prepared', 'Uninstalled')
 
 
 class Gui(tk.Frame):
@@ -113,14 +114,13 @@ class Gui(tk.Frame):
         all_out = []
         for cmd in data['sync_cmd']:
             _, err, _ = utils.get_command_output(cmd=cmd.split(' '))
-            parsed_lines = [line for line in err.split('\n') if 'Resolved' in line or 'Installed' in line or 'Audited' in line]
+            parsed_lines = [line for line in err.split('\n') if any(keyword in line for keyword in KEYWORDS)]
             all_out.extend(parsed_lines)
-        total_time_ms = sum(utils.extract_time(entry=entry) for entry in all_out)
-        if total_time_ms > 1000:
-            t = f'{total_time_ms / 1000:.2f} s'
-        else:
-            t = f'{total_time_ms:.2f} ms'
-        self.btn_sync.configure(text=f'Sync ({t})')
+        time_ms = sum(utils.extract_time(entry=entry) for entry in all_out)
+        packages = utils.extract_installed_packages(entry=all_out)
+        total_time = f'{time_ms / 1000:.2f} s' if time_ms > 1000 else f'{time_ms:.2f} ms'
+        desc = f'Installed {packages} in {total_time}' if packages else f'Sync in {total_time}'
+        self.btn_sync.configure(text=desc)
 
     def venv_selected(self) -> None:
         """Set the selected venv as the active one."""
