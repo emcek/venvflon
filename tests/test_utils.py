@@ -77,3 +77,11 @@ def test_failure_venv_list_in(resources):
 ])
 def test_extract_time_valid_values(entry, expected):
     assert utils.extract_time(entry=entry) == expected
+
+
+@mark.parametrize('entry, expected', [
+    (['Resolved 65 packages in 2.61s', 'Prepared 3 packages in 4.40s', 'Uninstalled 3 packages in 188ms', 'Installed 3 packages in 29ms'], 3),
+    (['Resolved 65 packages in 1ms', 'Audited 61 packages in 0.13ms'], 0),
+])
+def test_extract_installed_packages(entry, expected):
+    assert utils.extract_installed_packages(entry=entry) == expected
