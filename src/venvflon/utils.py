@@ -61,7 +61,7 @@ def make_sym_link(to_path: Path, target: Path, mode: LinkMode = LinkMode.PWSH5, 
     :param to_path: Path to a symbolic link
     :param target: Target path
     :param mode: Method to create symbolic name
-    :param timer: sleeping timer for PowerShell5 and 7 option
+    :param timer: sleeping timer for PowerShell 5 and PowerShell 7 options
     """
     if mode == LinkMode.PYTHON:
         to_path.symlink_to(target=target, target_is_directory=True)
