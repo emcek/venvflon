@@ -1,4 +1,7 @@
-## 0.6.1
+## 0.6.2
+* Show number of installed packages during sync
+
+* ## 0.6.1
 * Make window bigger at start
 
 ## 0.6.0
