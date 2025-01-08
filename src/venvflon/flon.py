@@ -109,6 +109,7 @@ class Gui(tk.Frame):
 
     def sync(self) -> None:
         """Run sync command from configuration YAML."""
+        self.btn_sync.configure(text='Syncing...')
         with open(file='.venvflon.yaml', encoding='utf-8') as yaml_file:
             data = yaml.load(yaml_file, Loader=yaml.SafeLoader)
         all_out = []
