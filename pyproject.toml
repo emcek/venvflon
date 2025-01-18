@@ -46,7 +46,7 @@ flon = 'venvflon.run:run'
 
 [project.optional-dependencies]
 test = [
-    'GitPython==3.1.43',
+    'GitPython==3.1.44',
     'interrogate==1.7.0',
     'isort==5.13.2',
     'lxml==5.3.0',
@@ -55,7 +55,7 @@ test = [
     'pip-audit==2.7.3',
     'pytest==8.3.4',
     'pytest-randomly==3.16.0',
-    'ruff==0.8.4',
+    'ruff==0.9.2',
     'types-pyyaml==6.0.12.20241230',
 ]
 
