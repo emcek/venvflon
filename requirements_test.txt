@@ -2,11 +2,11 @@
 GitPython==3.1.44
 interrogate==1.7.0
 isort==6.0.0
-lxml==5.3.0
+lxml==5.3.1
 mypy==1.15.0
 packaging==24.2
 pip-audit==2.8.0
 pytest==8.3.4
 pytest-randomly==3.16.0
-ruff==0.9.5
+ruff==0.9.7
 types-pyyaml==6.0.12.20241230

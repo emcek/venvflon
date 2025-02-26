@@ -30,7 +30,7 @@ repos:
         additional_dependencies: [types-PyYAML, lxml]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.9.5
+    rev: v0.9.7
     hooks:
       - id: ruff
         exclude: '/qtgui_rc.py$|tests/'
@@ -50,7 +50,7 @@ repos:
         args: [--omit-covered-files, --fail-under=90]
 
   - repo: https://github.com/pypa/pip-audit
-    rev: v2.7.3
+    rev: v2.8.0
     hooks:
       -   id: pip-audit
           args: [--local]
