@@ -1,7 +1,7 @@
 -r requirements.txt
 GitPython==3.1.44
 interrogate==1.7.0
-isort==6.0.0
+isort==6.0.1
 lxml==5.3.1
 mypy==1.15.0
 packaging==24.2
