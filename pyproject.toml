@@ -49,14 +49,14 @@ test = [
     'GitPython==3.1.44',
     'interrogate==1.7.0',
     'isort==6.0.1',
-    'lxml==5.3.1',
+    'lxml==5.3.2',
     'mypy==1.15.0',
     'packaging==24.2',
     'pip-audit==2.8.0',
     'pytest==8.3.5',
     'pytest-randomly==3.16.0',
-    'ruff==0.11.2',
-    'types-pyyaml==6.0.12.20250326',
+    'ruff==0.11.4',
+    'types-pyyaml==6.0.12.20250402',
 ]
 
 [tool.setuptools.dynamic]
