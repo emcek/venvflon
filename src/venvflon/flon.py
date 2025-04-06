@@ -5,6 +5,7 @@ from argparse import Namespace
 from os import chdir, getcwd, rename
 from pathlib import Path
 from re import match
+from tkinter import ttk
 
 import yaml
 from tkinterdnd2 import DND_FILES, TkinterDnD
@@ -13,6 +14,7 @@ from venvflon import utils
 
 __version__ = '0.6.2'
 KEYWORDS = ('Resolved', 'Installed', 'Audited', 'Prepared', 'Uninstalled')
+LATEST_PYTHON = '3.13'
 
 
 class Gui(tk.Frame):
@@ -42,6 +44,10 @@ class Gui(tk.Frame):
         self.cwd = tk.Entry(master=self.master, textvariable=self.cwd_entry, width=20, relief=tk.SUNKEN, font=('Arial', 9))
         self.btn_sync = tk.Button(master=self.master, text='Sync', command=self.sync, font=('Arial', 9))
         self.btn_create = tk.Button(master=self.master, text='Create', command=self.create, font=('Arial', 9))
+        pythons_list = utils.get_uv_pythons_list()
+        self.combo_py_ver = ttk.Combobox(master=self.master, values=pythons_list, state='readonly')
+        index_of_element = next((i for i, item in enumerate(pythons_list) if item.startswith(LATEST_PYTHON)), 0)
+        self.combo_py_ver.current(int(index_of_element))
         self.init_widgets()
 
     def init_widgets(self) -> None:
@@ -52,8 +58,11 @@ class Gui(tk.Frame):
         self.cwd.grid(row=0, column=1, columnspan=2, sticky=tk.EW, padx=5, pady=5)
         self.cwd.bind('<Return>', self.refresh_cwd)
         self.cwd.dnd_bind('<<Drop>>', self.drop_in_cwd)  # type: ignore[attr-defined]
-        self.btn_sync.grid(row=3, column=1, sticky=tk.EW, padx=5, pady=5)
-        self.btn_create.grid(row=3, column=2, sticky=tk.EW, padx=5, pady=5)
+        combo_label = tk.Label(self.master, text='python:', font=('Arial', 9))
+        combo_label.grid(row=3, column=0, sticky=tk.W, padx=5, pady=5)
+        self.combo_py_ver.grid(row=3, column=1, columnspan=2, sticky=tk.EW, padx=5, pady=5)
+        self.btn_sync.grid(row=4, column=1, sticky=tk.EW, padx=5, pady=5)
+        self.btn_create.grid(row=4, column=2, sticky=tk.EW, padx=5, pady=5)
         self.sync_btn_state()
         self.add_venvs()
 
@@ -69,7 +78,7 @@ class Gui(tk.Frame):
                 self._select_current_venv(venv_path=str(text))
                 rb_venvs.configure(command=self.venv_selected)
                 rb_venvs.grid(row=i, column=1, pady=0, padx=2, sticky=tk.W)
-        self.status.grid(row=4, column=0, columnspan=3, sticky=tk.W, padx=5, pady=10)
+        self.status.grid(row=5, column=0, columnspan=3, sticky=tk.W, padx=5, pady=10)
         self.update_status()
 
     def _remove_old_radiobuttons(self) -> None:
