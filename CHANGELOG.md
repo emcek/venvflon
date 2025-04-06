@@ -1,3 +1,6 @@
+## 0.7.0
+* Create symbolic link from real virtual environment
+
 ## 0.6.2
 * Show number of installed packages during sync
 
