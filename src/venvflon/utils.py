@@ -4,7 +4,7 @@ from collections.abc import Sequence
 from enum import Enum
 from os import sep, walk
 from pathlib import Path
-from re import findall, search
+from re import search
 from subprocess import CalledProcessError, run
 from time import sleep
 
@@ -149,9 +149,14 @@ def get_uv_pythons_list() -> list[str]:
 
     :return: A list of Python versions as strings
     """
-    output = ['']
+    output = []
     *_, out = get_command_output(cmd=['uv', 'python', 'list'])
-    py_list = findall(r'cpython-([^-]+)-', out.strip())
-    if py_list is not None:
-        output = py_list
-    return output
+
+    for line in out.strip().splitlines():
+        match = search(r'^cpython-([^-]+)-', line)
+        if match:
+            output.append(match.group(1))
+
+    if len(output) > 1:
+        output.pop(0)
+    return output if len(output) > 1 else ['']
