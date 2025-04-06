@@ -159,6 +159,19 @@ class Gui(tk.Frame):
         else:
             self.btn_sync.configure(state=tk.DISABLED)
 
+    def _rename_venv_and_make_symlink(self):
+        """Rename existing venv and make symlink to it."""
+        *_, out = utils.get_command_output(cmd=[r'.venv\Scripts\python.exe', '-V'])
+        py_ver = match(r'Python\s+(\d+)\.(\d+)\.\d+', out.strip())
+        if py_ver is None:
+            self.status_txt.set('Error: cannot detect Python version')
+            return
+        venv_with_ver = f'.venv_{py_ver.group(1)}{py_ver.group(2)}'
+        rename('.venv', venv_with_ver)
+        sym_link = Path(getcwd()) / '.venv'
+        new_venv = Path(getcwd()) / venv_with_ver
+        utils.make_sym_link(to_path=sym_link, target=Path(new_venv), mode=self.config.link_mode, timer=self.config.timer)
+
     def create(self) -> None:
         """Create a new virtual environment."""
         venv = Path(self.cwd_entry.get()) / '.venv'
@@ -166,14 +179,9 @@ class Gui(tk.Frame):
             self.status_txt.set('Symlink already set')
             return
         if venv.exists():
-            *_, out = utils.get_command_output(cmd=[r'.venv\Scripts\python.exe', '-V'])
-            py_ver = match(r'Python\s+(\d+)\.(\d+)\.\d+', out.strip())
-            if py_ver is None:
-                self.status_txt.set('Error: cannot detect Python version')
-                return
-            venv_with_ver = f'.venv_{py_ver.group(1)}{py_ver.group(2)}'
-            rename('.venv', venv_with_ver)
-            sym_link = Path(getcwd()) / '.venv'
-            new_venv = Path(getcwd()) / venv_with_ver
-            utils.make_sym_link(to_path=sym_link, target=Path(new_venv), mode=self.config.link_mode, timer=self.config.timer)
-            self.refresh_cwd()
+            self._rename_venv_and_make_symlink()
+        else:
+            uv_py_ver = self.combo_py_ver.get()
+            utils.get_command_output(cmd=['uv', 'venv', '--python', uv_py_ver])
+            self._rename_venv_and_make_symlink()
+        self.refresh_cwd()
