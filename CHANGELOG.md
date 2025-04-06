@@ -1,5 +1,6 @@
 ## 0.7.0
 * Create symbolic link from real virtual environment
+* Make new virtual environment based on uv python list
 
 ## 0.6.2
 * Show number of installed packages during sync

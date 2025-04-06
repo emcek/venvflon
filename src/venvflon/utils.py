@@ -141,3 +141,22 @@ def extract_installed_packages(entry: Sequence[str]) -> int:
             no_of_pack = int(match.group(1))
             break
     return no_of_pack
+
+
+def get_uv_pythons_list() -> list[str]:
+    """
+    Get a list of Python versions manged by uv.
+
+    :return: A list of Python versions as strings
+    """
+    output = []
+    *_, out = get_command_output(cmd=['uv', 'python', 'list'])
+
+    for line in out.strip().splitlines():
+        match = search(r'^cpython-([^-]+)-', line)
+        if match:
+            output.append(match.group(1))
+
+    if len(output) > 1:
+        output.pop(0)
+    return output if len(output) > 1 else ['']
