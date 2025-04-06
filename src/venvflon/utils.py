@@ -4,7 +4,7 @@ from collections.abc import Sequence
 from enum import Enum
 from os import sep, walk
 from pathlib import Path
-from re import search
+from re import findall, search
 from subprocess import CalledProcessError, run
 from time import sleep
 
@@ -141,3 +141,17 @@ def extract_installed_packages(entry: Sequence[str]) -> int:
             no_of_pack = int(match.group(1))
             break
     return no_of_pack
+
+
+def get_uv_pythons_list() -> list[str]:
+    """
+    Get a list of Python versions manged by uv.
+
+    :return: A list of Python versions as strings
+    """
+    output = ['']
+    *_, out = get_command_output(cmd=['uv', 'python', 'list'])
+    py_list = findall(r'cpython-([^-]+)-', out.strip())
+    if py_list is not None:
+        output = py_list
+    return output
