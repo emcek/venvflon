@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import tkinter as tk
 from argparse import Namespace
-from os import chdir, getcwd
+from os import chdir, getcwd, rename
 from pathlib import Path
+from re import match
 
 import yaml
 from tkinterdnd2 import DND_FILES, TkinterDnD
@@ -34,11 +35,13 @@ class Gui(tk.Frame):
         self.cwd_entry.set(getcwd())
         self.venv_list = utils.venv_list_in(current_path=Path(getcwd()))
         self.master.columnconfigure(1, weight=1)
+        self.master.columnconfigure(2, weight=1)
         self.master.rowconfigure(2, weight=1)
         self.frame = tk.Frame(master=self.master, relief=tk.GROOVE, borderwidth=2)
         self.status = tk.Label(master=self.master, textvariable=self.status_txt, font=('Arial', 9, 'italic'))
         self.cwd = tk.Entry(master=self.master, textvariable=self.cwd_entry, width=20, relief=tk.SUNKEN, font=('Arial', 9))
         self.btn_sync = tk.Button(master=self.master, text='Sync', command=self.sync, font=('Arial', 9))
+        self.btn_create = tk.Button(master=self.master, text='Create', command=self.create, font=('Arial', 9))
         self.init_widgets()
 
     def init_widgets(self) -> None:
@@ -46,10 +49,11 @@ class Gui(tk.Frame):
         self.cwd.drop_target_register(DND_FILES)  # type: ignore[attr-defined]
         cwd_label = tk.Label(self.master, text='cwd:', font=('Arial', 9))
         cwd_label.grid(row=0, column=0, sticky=tk.W, padx=5, pady=5)
-        self.cwd.grid(row=0, column=1, sticky=tk.EW, padx=5, pady=5)
+        self.cwd.grid(row=0, column=1, columnspan=2, sticky=tk.EW, padx=5, pady=5)
         self.cwd.bind('<Return>', self.refresh_cwd)
         self.cwd.dnd_bind('<<Drop>>', self.drop_in_cwd)  # type: ignore[attr-defined]
         self.btn_sync.grid(row=3, column=1, sticky=tk.EW, padx=5, pady=5)
+        self.btn_create.grid(row=3, column=2, sticky=tk.EW, padx=5, pady=5)
         self.sync_btn_state()
         self.add_venvs()
 
@@ -145,3 +149,22 @@ class Gui(tk.Frame):
             self.btn_sync.configure(state=tk.ACTIVE)
         else:
             self.btn_sync.configure(state=tk.DISABLED)
+
+    def create(self) -> None:
+        """Create a new virtual environment."""
+        venv = Path(self.cwd_entry.get()) / '.venv'
+        if venv.is_symlink():
+            self.status_txt.set('Symlink already set')
+            return
+        if venv.exists():
+            *_, out = utils.get_command_output(cmd=[r'.venv\Scripts\python.exe', '-V'])
+            py_ver = match(r'Python\s+(\d+)\.(\d+)\.\d+', out.strip())
+            if py_ver is None:
+                self.status_txt.set('Error: cannot detect Python version')
+                return
+            venv_with_ver = f'.venv_{py_ver.group(1)}{py_ver.group(2)}'
+            rename('.venv', venv_with_ver)
+            sym_link = Path(getcwd()) / '.venv'
+            new_venv = Path(getcwd()) / venv_with_ver
+            utils.make_sym_link(to_path=sym_link, target=Path(new_venv), mode=self.config.link_mode, timer=self.config.timer)
+            self.refresh_cwd()
