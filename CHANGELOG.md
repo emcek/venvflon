@@ -1,3 +1,6 @@
+## 0.7.1
+* Fix bug when first Python version is removed from the list
+
 ## 0.7.0
 * Create symbolic link from real virtual environment
 * Make new virtual environment based on uv python list

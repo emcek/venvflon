@@ -157,6 +157,4 @@ def get_uv_pythons_list() -> list[str]:
         if match:
             output.append(match.group(1))
 
-    if len(output) > 1:
-        output.pop(0)
     return output if len(output) > 1 else ['']
