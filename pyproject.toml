@@ -46,7 +46,7 @@ flon = 'venvflon.run:run'
 
 [project.optional-dependencies]
 test = [
-    'GitPython==3.1.44',
+    'GitPython==3.1.45',
     'interrogate==1.7.0',
     'isort==6.0.1',
     'lxml==6.0.0',
