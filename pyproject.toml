@@ -55,7 +55,7 @@ test = [
     'pip-audit==2.9.0',
     'pytest==8.4.1',
     'pytest-randomly==3.16.0',
-    'ruff==0.12.1',
+    'ruff==0.12.7',
     'types-pyyaml==6.0.12.20250516',
 ]
 
