@@ -1,2 +1,2 @@
-pyyaml==6.0.2
-tkinterdnd2==0.4.3
+pyyaml
+tkinterdnd2

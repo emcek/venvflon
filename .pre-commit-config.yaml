@@ -23,17 +23,17 @@ repos:
         args: [--pytest-test-first]
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.16.1
+    rev: v1.17.1
     hooks:
       - id: mypy
         exclude: 'tests/'
         additional_dependencies: [types-PyYAML, lxml]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.12.2
+    rev: v0.12.7
     hooks:
       - id: ruff
-        exclude: '/qtgui_rc.py$|tests/'
+        exclude: 'tests/'
         args: [--fix, --exit-non-zero-on-fix]
 
   - repo: https://github.com/asottile/pyupgrade
