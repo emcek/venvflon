@@ -1,3 +1,6 @@
+## 0.7.2
+* Add uv version to status bar
+
 ## 0.7.1
 * Fix bug when first Python version is removed from the list
 
