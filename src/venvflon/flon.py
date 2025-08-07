@@ -146,11 +146,12 @@ class Gui(tk.Frame):
 
     def update_status(self) -> None:
         """Update the status text."""
-        _, err, out = utils.get_command_output(cmd=[r'.venv\Scripts\python.exe', '-V'])
-        if out:
-            self.status_txt.set(f'v{__version__}   /   Current: {out.strip()}')
-        elif err:
-            self.status_txt.set(f'v{__version__}   /   Error: {err.strip()}')
+        _, py_err, py_out = utils.get_command_output(cmd=[r'.venv\Scripts\python.exe', '-V'])
+        _, uv_err, uv_out = utils.get_command_output(cmd=[r'uv', '-V'])
+        if py_out and uv_out:
+            self.status_txt.set(f'v{__version__}   /   {py_out.strip()}   /   {uv_out.split(" (")[0]}')
+        elif py_err:
+            self.status_txt.set(f'v{__version__}   /   Error: {py_err.strip()}   /   {uv_out.split(" (")[0]}')
 
     def sync_btn_state(self) -> None:
         """Check if a config YAML file exists and change a button status."""
