@@ -147,7 +147,7 @@ class Gui(tk.Frame):
     def update_status(self) -> None:
         """Update the status text."""
         _, py_err, py_out = utils.get_command_output(cmd=[r'.venv\Scripts\python.exe', '-V'])
-        _, uv_err, uv_out = utils.get_command_output(cmd=[r'uv', '-V'])
+        _, _, uv_out = utils.get_command_output(cmd=[r'uv', '-V'])
         if py_out and uv_out:
             self.status_txt.set(f'v{__version__}   /   {py_out.strip()}   /   {uv_out.split(" (")[0]}')
         elif py_err:
