@@ -12,9 +12,9 @@ from tkinterdnd2 import DND_FILES, TkinterDnD
 
 from venvflon import utils
 
-__version__ = '0.7.1'
+__version__ = '0.7.2'
 KEYWORDS = ('Resolved', 'Installed', 'Audited', 'Prepared', 'Uninstalled')
-LATEST_PYTHON = '3.13'
+LATEST_PYTHON = '3.14'
 
 
 class Gui(tk.Frame):
