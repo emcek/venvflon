@@ -1,3 +1,6 @@
+## 0.7.3
+* Add support for Python 3.14
+
 ## 0.7.2
 * Add uv version to status bar
 
