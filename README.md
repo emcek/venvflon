@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 [![Downloads](https://img.shields.io/github/downloads/emcek/venvflon/total?label=Downloads)](https://github.com/emcek/venvflon/releases)
 [![venvflon](https://snyk.io/advisor/python/venvflon/badge.svg)](https://snyk.io/advisor/python/venvflon)
-[![image](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue.svg)](https://github.com/emcek/venvflon)
+[![image](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11%20%7C%203.12%20%7C%203.13%20%7C%203.14-blue.svg)](https://github.com/emcek/venvflon)
 [![Downloads](https://static.pepy.tech/badge/venvflon)](https://pepy.tech/project/venvflon)
 
 # venvflon
