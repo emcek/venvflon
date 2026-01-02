@@ -23,14 +23,14 @@ repos:
         args: [--pytest-test-first]
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.19.0
+    rev: v1.19.1
     hooks:
       - id: mypy
         exclude: 'tests/'
         additional_dependencies: [types-PyYAML, lxml]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.7
+    rev: v0.14.10
     hooks:
       - id: ruff
         exclude: 'tests/'
@@ -40,7 +40,7 @@ repos:
     rev: v3.21.2
     hooks:
       - id: pyupgrade
-        args: [--py39-plus]
+        args: [--py310-plus]
 
   - repo: https://github.com/econchick/interrogate
     rev: 1.7.0
@@ -50,7 +50,7 @@ repos:
         args: [--omit-covered-files, --fail-under=90]
 
   - repo: https://github.com/pypa/pip-audit
-    rev: v2.9.0
+    rev: v2.10.0
     hooks:
       -   id: pip-audit
           args: [--local]
