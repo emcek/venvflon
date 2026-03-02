@@ -30,8 +30,8 @@ keywords = [
 ]
 dynamic = ['version']
 dependencies = [
-    'pyyaml',
-    'tkinterdnd2',
+    'pyyaml==6.0.3',
+    'tkinterdnd2==0.4.3',
 ]
 [project.urls]
 Homepage = 'https://github.com/emcek/venvflon'
