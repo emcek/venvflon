@@ -43,7 +43,7 @@ jobs:
           ($changelog | Select-Object -First $last_change -Skip 1) -join "`n" | Out-File .\RELEASENOTES.md
 
       - name: "Create Release"
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         env:
           GITHUB_TOKEN: ${{ secrets.VENVFLON_REL_TOKEN }}
         with:
