@@ -119,8 +119,8 @@ exclude = [
 [tool.isort]
 line_length = 160
 
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
     'venvflon[test]',
     'build',
     'pre-commit',
