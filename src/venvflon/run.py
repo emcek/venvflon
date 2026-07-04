@@ -13,7 +13,7 @@ def run() -> None:
     """Run the main GUI."""
     parser = ArgumentParser(description='simple virtual environment switcher')
     parser.add_argument('-V', '--version', action='version', version='%(prog)s version: ' + __version__)
-    parser.add_argument('-p', '--pwsh', action='store', dest='link_mode', type=int, choices=[0, 5, 7], default=0,
+    parser.add_argument('-p', '--pwsh', action='store', dest='link_mode', type=int, choices=[0, 5, 7], default=7,
                         help='0 - use Python, pwsh5 or pwsh7 to make symbolic link')
     parser.add_argument('-t', '--timer', action='store', dest='timer', type=float, default=1.2,
                         help='sleep time (in seconds) for pwsh5 and pwsh7')
