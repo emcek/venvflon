@@ -177,11 +177,14 @@ class Gui(tk.Frame):
     def _make_new_venv_and_symlink(self) -> None:
         """Make new venv and make symlink to it."""
         uv_py_ver = self.combo_py_ver.get()
+        py_ver = match(r'(\d+)\.(\d+)\.\d+', uv_py_ver)
+        if py_ver is None:
+            self.status_txt.set('Error: cannot detect Python version')
+            return
         sym_link = Path(getcwd()) / '.venv'
         utils.rm_sym_link(sym_link=sym_link, mode=self.config.link_mode)
         sleep(self.config.timer)
         utils.get_command_output(cmd=['uv', 'venv', '--python', uv_py_ver])
-        py_ver = match(r'(\d+)\.(\d+)\.\d+', uv_py_ver)
         venv_with_ver = f".venv_{py_ver.group(1)}{py_ver.group(2)}"
         new_venv = Path(getcwd()) / venv_with_ver
         rename('.venv', venv_with_ver)
