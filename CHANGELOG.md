@@ -1,3 +1,7 @@
+## 0.8.0
+* Make new virtual environment even when already exist other one
+* Update tkinterdnd2 to 0.6.1
+
 ## 0.7.3
 * Add support for Python 3.14
 
