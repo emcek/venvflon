@@ -13,7 +13,7 @@ from tkinterdnd2 import DND_FILES, TkinterDnD
 
 from venvflon import utils
 
-__version__ = '0.7.2'
+__version__ = '0.8.0'
 KEYWORDS = ('Resolved', 'Installed', 'Audited', 'Prepared', 'Uninstalled')
 LATEST_PYTHON = '3.14'
 
