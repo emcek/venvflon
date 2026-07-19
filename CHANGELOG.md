@@ -1,5 +1,7 @@
 ## 0.9.0
 * Show all python versions with optional installation location
+* Add button to update uv tool itself
+* Update tkinterdnd2 to 0.6.2
 
 ## 0.8.0
 * Make new virtual environment even when already exist other one
