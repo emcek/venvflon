@@ -1,3 +1,6 @@
+## 0.9.1
+* use uv and remove all requirements text files
+
 ## 0.9.0
 * Show all python versions with optional installation location
 * Add button to update uv tool itself
