@@ -143,18 +143,17 @@ def extract_installed_packages(entry: Sequence[str]) -> int:
     return no_of_pack
 
 
-def get_uv_pythons_list() -> list[str]:
+def get_uv_pythons_dict() -> dict[str, str]:
     """
-    Get a list of Python versions manged by uv.
+    Get a dict of Python versions with install locations manged by uv.
 
-    :return: A list of Python versions as strings
+    :return: A dict with Python versions and install location as strings
     """
-    output = []
+    output = {}
     *_, out = get_command_output(cmd=['uv', 'python', 'list'])
 
     for line in out.strip().splitlines():
-        match = search(r'^cpython-([^-]+)-', line)
-        if match:
-            output.append(match.group(1))
+        if match := search(r'^(\S+?)(?:-windows-x86_64-none|-linux-x86_64-gnu)?\s+(.+)$', line):
+            output[match.group(1)] = match.group(2)
 
-    return output if output else ['']
+    return output if output else {'': ''}
