@@ -1,3 +1,6 @@
+## 0.9.0
+* Show all python versions with optional installation location
+
 ## 0.8.0
 * Make new virtual environment even when already exist other one
 * Update tkinterdnd2 to 0.6.1
