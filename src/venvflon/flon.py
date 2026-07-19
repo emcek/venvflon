@@ -39,12 +39,14 @@ class Gui(tk.Frame):
         self.venv_list = utils.venv_list_in(current_path=Path(getcwd()))
         self.master.columnconfigure(1, weight=1)
         self.master.columnconfigure(2, weight=1)
+        self.master.columnconfigure(3, weight=1)
         self.master.rowconfigure(2, weight=1)
         self.frame = tk.Frame(master=self.master, relief=tk.GROOVE, borderwidth=2)
         self.status = tk.Label(master=self.master, textvariable=self.status_txt, font=('Arial', 9, 'italic'))
         self.cwd = tk.Entry(master=self.master, textvariable=self.cwd_entry, width=20, relief=tk.SUNKEN, font=('Arial', 9))
         self.btn_sync = tk.Button(master=self.master, text='Sync', command=self.sync, font=('Arial', 9))
-        self.btn_create = tk.Button(master=self.master, text='Create', command=self.create, font=('Arial', 9))
+        self.btn_create = tk.Button(master=self.master, text='Create venv', command=self.create, font=('Arial', 9))
+        self.btn_uv_upd = tk.Button(master=self.master, text='Update UV', command=self.uv_update, font=('Arial', 9))
         self.pythons_dict = utils.get_uv_pythons_dict()
         self.combo_py_ver = ttk.Combobox(master=self.master, values=list(self.pythons_dict.keys()), state='readonly')
         self.combo_py_ver.bind('<<ComboboxSelected>>', self._combo_py_ver_change)
@@ -59,18 +61,19 @@ class Gui(tk.Frame):
         self.cwd.drop_target_register(DND_FILES)  # type: ignore[attr-defined]
         cwd_label = tk.Label(self.master, text='cwd:', font=('Arial', 9))
         cwd_label.grid(row=0, column=0, sticky=tk.W, padx=5, pady=5)
-        self.cwd.grid(row=0, column=1, columnspan=2, sticky=tk.EW, padx=5, pady=5)
+        self.cwd.grid(row=0, column=1, columnspan=3, sticky=tk.EW, padx=5, pady=5)
         self.cwd.bind('<Return>', self.refresh_cwd)
         self.cwd.dnd_bind('<<Drop>>', self.drop_in_cwd)  # type: ignore[attr-defined]
         loc_lable = tk.Label(self.master, text='location:', font=('Arial', 9))
         loc_lable.grid(row=3, column=0, sticky=tk.W, padx=5, pady=5)
         self.pyloc_lable = tk.Label(self.master, text=py_location, font=('Arial', 9), anchor=tk.W, justify=tk.LEFT)
-        self.pyloc_lable.grid(row=3, column=1, columnspan=2, sticky=tk.EW, padx=5, pady=5)
+        self.pyloc_lable.grid(row=3, column=1, columnspan=3, sticky=tk.EW, padx=5, pady=5)
         combo_label = tk.Label(self.master, text='python:', font=('Arial', 9))
         combo_label.grid(row=4, column=0, sticky=tk.W, padx=5, pady=5)
-        self.combo_py_ver.grid(row=4, column=1, columnspan=2, sticky=tk.EW, padx=5, pady=5)
+        self.combo_py_ver.grid(row=4, column=1, columnspan=3, sticky=tk.EW, padx=5, pady=5)
         self.btn_sync.grid(row=5, column=1, sticky=tk.EW, padx=5, pady=5)
         self.btn_create.grid(row=5, column=2, sticky=tk.EW, padx=5, pady=5)
+        self.btn_uv_upd.grid(row=5, column=3, sticky=tk.EW, padx=5, pady=5)
         self.sync_btn_state()
         self.add_venvs()
 
@@ -78,7 +81,7 @@ class Gui(tk.Frame):
         """Add venvs as radio buttons to the GUI."""
         self._remove_old_radiobuttons()
         if len(self.venv_list):
-            self.frame.grid(row=2, column=0, columnspan=3, padx=5, pady=5, sticky=tk.NSEW)
+            self.frame.grid(row=2, column=0, columnspan=4, padx=5, pady=5, sticky=tk.NSEW)
             self.frame.columnconfigure(1, weight=1)
             for i, text in enumerate(self.venv_list, 1):
                 rb_venvs = tk.Radiobutton(master=self.frame, text=str(text), variable=self.venv, value=text,
@@ -86,7 +89,7 @@ class Gui(tk.Frame):
                 self._select_current_venv(venv_path=str(text))
                 rb_venvs.configure(command=self.venv_selected)
                 rb_venvs.grid(row=i, column=1, pady=0, padx=2, sticky=tk.W)
-        self.status.grid(row=6, column=0, columnspan=3, sticky=tk.W, padx=5, pady=10)
+        self.status.grid(row=6, column=0, columnspan=4, sticky=tk.W, padx=5, pady=10)
         self.update_status()
 
     def _remove_old_radiobuttons(self) -> None:
@@ -217,4 +220,9 @@ class Gui(tk.Frame):
             uv_py_ver = self.combo_py_ver.get()
             utils.get_command_output(cmd=['uv', 'venv', '--python', uv_py_ver])
             self._rename_venv_and_make_symlink()
+        self.refresh_cwd()
+
+    def uv_update(self) -> None:
+        """Update uv tool."""
+        utils.run_command(cmd=['uv', 'self', 'update'])
         self.refresh_cwd()
