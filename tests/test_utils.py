@@ -92,7 +92,10 @@ def test_extract_installed_packages(entry, expected):
     'cpython-3.14.0a6+freethreaded-windows-x86_64-none    <download available>\ncpython-3.14.0a6-windows-x86_64-none                 <download available>\n',
     'cpython-3.14.0a6+freethreaded-linux-x86_64-gnu    <download available>\ncpython-3.14.0a6-linux-x86_64-gnu                 <download available>\n',
 ], ids=['Windows', 'Linux'])
-def test_get_uv_pythons_list(cmd_out):
+def test_get_uv_pythons_dict(cmd_out):
     with mock.patch('venvflon.utils.get_command_output') as get_command_output_mock:
         get_command_output_mock.return_value = 0, '', cmd_out
-        assert utils.get_uv_pythons_list() == ['3.14.0a6+freethreaded', '3.14.0a6']
+        assert utils.get_uv_pythons_dict() == {
+            'cpython-3.14.0a6+freethreaded': '<download available>',
+            'cpython-3.14.0a6': '<download available>',
+        }
