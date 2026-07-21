@@ -1,3 +1,6 @@
+## 0.9.2
+* Fix bug when creating new virtual environment if other already exists
+ 
 ## 0.9.1
 * use uv and remove all requirements text files
 
