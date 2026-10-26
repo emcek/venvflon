@@ -4,7 +4,7 @@ ci:
   skip: [ pip-audit ]
 
 default_language_version:
-  python: python3.14
+  python: python3.15
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -39,7 +39,7 @@ repos:
     rev: v3.22.0
     hooks:
       - id: pyupgrade
-        args: [ --py310-plus ]
+        args: [ --py311-plus ]
 
   - repo: https://github.com/econchick/interrogate
     rev: 1.7.0
