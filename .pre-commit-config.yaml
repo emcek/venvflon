@@ -29,14 +29,14 @@ repos:
         additional_dependencies: [ types-PyYAML, lxml ]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.16.10
+    rev: v0.17.2
     hooks:
       - id: ruff
         exclude: 'tests/'
         args: [ --fix, --exit-non-zero-on-fix ]
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.21.2
+    rev: v3.22.0
     hooks:
       - id: pyupgrade
         args: [ --py310-plus ]
@@ -55,11 +55,11 @@ repos:
         args: [ --local ]
 
   - repo: https://github.com/abravalheri/validate-pyproject
-    rev: '0.26'
+    rev: 'v0.27'
     hooks:
       - id: validate-pyproject
 
   - repo: https://github.com/pycqa/isort
-    rev: 9.0.2
+    rev: 10.0.0b1
     hooks:
       - id: isort
