@@ -1,3 +1,8 @@
+## 0.9.3
+* Update tkinterdnd2 to 0.7.0
+* Add support for Python 3.15
+* remove python 3.10 from list of supported versions
+
 ## 0.9.2
 * Fix bug when creating new virtual environment if other already exists
 
