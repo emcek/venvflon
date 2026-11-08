@@ -2,10 +2,8 @@ from __future__ import annotations
 
 import tkinter as tk
 from argparse import Namespace
-from os import chdir, getcwd, rename
+from os import chdir, getcwd
 from pathlib import Path
-from re import match
-from time import sleep
 from tkinter import ttk
 
 import yaml
@@ -171,35 +169,6 @@ class Gui(tk.Frame):
         else:
             self.btn_sync.configure(state=tk.DISABLED)
 
-    def _rename_venv_and_make_symlink(self):
-        """Rename existing venv and make symlink to it."""
-        *_, out = utils.get_command_output(cmd=[r'.venv\Scripts\python.exe', '-V'])
-        py_ver = match(r'Python\s+(\d+)\.(\d+)\.\d+', out.strip())
-        if py_ver is None:
-            self.status_txt.set('Error: cannot detect Python version')
-            return
-        venv_with_ver = f'.venv_{py_ver.group(1)}{py_ver.group(2)}'
-        rename('.venv', venv_with_ver)
-        sym_link = Path(getcwd()) / '.venv'
-        new_venv = Path(getcwd()) / venv_with_ver
-        utils.make_sym_link(to_path=sym_link, target=Path(new_venv), mode=self.config.link_mode, timer=self.config.timer)
-
-    def _make_new_venv_and_symlink(self) -> None:
-        """Make new venv and make symlink to it."""
-        uv_py_ver = self.combo_py_ver.get()
-        py_ver = match(r'^\w*-(\d+)\.(\d+)\.\d+', uv_py_ver)
-        if py_ver is None:
-            self.status_txt.set('Error: cannot detect Python version')
-            return
-        sym_link = Path(getcwd()) / '.venv'
-        utils.rm_sym_link(sym_link=sym_link, mode=self.config.link_mode)
-        sleep(self.config.timer)
-        utils.get_command_output(cmd=['uv', 'venv', '--python', uv_py_ver])
-        venv_with_ver = f".venv_{py_ver.group(1)}{py_ver.group(2)}"
-        new_venv = Path(getcwd()) / venv_with_ver
-        rename('.venv', venv_with_ver)
-        utils.make_sym_link(to_path=sym_link, target=Path(new_venv), mode=self.config.link_mode, timer=self.config.timer)
-
     def _combo_py_ver_change(self, event: tk.Event[ttk.Combobox]) -> None:
         """
         Update the label with the selected Python version's location.
@@ -212,14 +181,18 @@ class Gui(tk.Frame):
     def create(self) -> None:
         """Create a new virtual environment."""
         venv = Path(self.cwd_entry.get()) / '.venv'
+        uv_py_ver = self.combo_py_ver.get()
+
         if venv.is_symlink():
-            self._make_new_venv_and_symlink()
+            msg = utils.make_new_venv_and_symlink(uv_py_ver=uv_py_ver, config=self.config)
         elif venv.exists():
-            self._rename_venv_and_make_symlink()
+            msg = utils.rename_venv_and_make_symlink(config=self.config)
         else:
-            uv_py_ver = self.combo_py_ver.get()
             utils.get_command_output(cmd=['uv', 'venv', '--python', uv_py_ver])
-            self._rename_venv_and_make_symlink()
+            msg = utils.rename_venv_and_make_symlink(config=self.config)
+
+        if msg:
+            self.status_txt.set(msg)
         self.refresh_cwd()
 
     def uv_update(self) -> None:

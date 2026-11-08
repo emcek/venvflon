@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+import os
+from argparse import Namespace
 from collections.abc import Sequence
 from enum import Enum
-from os import sep, walk
 from pathlib import Path
-from re import search
+from re import match, search
 from subprocess import CalledProcessError, run
 from time import sleep
 
@@ -99,11 +100,11 @@ def venv_list_in(current_path: Path, max_depth: int = 1) -> list[Path]:
     :return: A list of paths to virtual environments
     """
     result = []
-    for dir_path, dir_names, _ in walk(current_path, topdown=True):
+    for dir_path, dir_names, _ in os.walk(current_path, topdown=True):
         for dirname in dir_names:
             if '.venv_' in dirname:
                 result.append(Path(dir_path) / dirname)
-        if dir_path.count(sep) - str(current_path).count(sep) == max_depth - 1:
+        if dir_path.count(os.sep) - str(current_path).count(os.sep) == max_depth - 1:
             del dir_names[:]
     return result
 
@@ -157,3 +158,44 @@ def get_uv_pythons_dict() -> dict[str, str]:
             output[match.group(1)] = match.group(2)
 
     return output if output else {'': ''}
+
+
+def make_new_venv_and_symlink(uv_py_ver: str, config: Namespace) -> str:
+    """
+    Make new venv and make symlink to it.
+
+    :param uv_py_ver: full Python version
+    :param config: Config object
+    :return: optional messge
+    """
+    py_ver = match(r'^\w*-(\d+)\.(\d+)\.(\d+)$', uv_py_ver)
+    if py_ver is None:
+        return 'Error: cannot detect Python version'
+    sym_link = Path(os.getcwd()) / '.venv'
+    rm_sym_link(sym_link=sym_link, mode=config.link_mode)
+    sleep(config.timer)
+    get_command_output(cmd=['uv', 'venv', '--python', uv_py_ver])
+    venv_with_ver = f".venv_{py_ver.group(1)}{py_ver.group(2)}_{py_ver.group(2)}"
+    new_venv = Path(os.getcwd()) / venv_with_ver
+    os.rename('.venv', venv_with_ver)
+    make_sym_link(to_path=sym_link, target=Path(new_venv), mode=config.link_mode, timer=config.timer)
+    return ''
+
+
+def rename_venv_and_make_symlink(config: Namespace) -> str:
+    """
+    Rename existing venv and make symlink to it.
+
+    :param config: Config object
+    :return: optional messge
+    """
+    *_, out = get_command_output(cmd=[r'.venv\Scripts\python.exe', '-V'])
+    py_ver = match(r'Python\s+(\d+)\.(\d+)\.(\d+)$', out.strip())
+    if py_ver is None:
+        return 'Error: cannot detect Python version'
+    venv_with_ver = f'.venv_{py_ver.group(1)}{py_ver.group(2)}_{py_ver.group(3)}'
+    sym_link = Path(os.getcwd()) / '.venv'
+    new_venv = Path(os.getcwd()) / venv_with_ver
+    os.rename(sym_link, new_venv)
+    make_sym_link(to_path=sym_link, target=Path(new_venv), mode=config.link_mode, timer=config.timer)
+    return ''
