@@ -23,6 +23,6 @@ def config():
     if platform == 'win32':
         return Namespace(link_mode=utils.LinkMode.PWSH5, timer=False)
     elif platform == 'linux':
-        return Namespace(link_mode=utils.LinkMode.PYTHON, timer=False)
+        return Namespace(link_mode=utils.LinkMode.PYTHON, timer=4)
     else:
         return Namespace(link_mode=utils.LinkMode.PWSH7, timer=False)
