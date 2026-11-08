@@ -53,13 +53,13 @@ def test_make_and_remove_sym_link():
 def test_success_deep_1_venv_list_in(resources):
     venvs = utils.venv_list_in(current_path=resources, max_depth=1)
     assert len(venvs) == 3
-    assert sorted([venv.name for venv in venvs]) == ['.venv_310', '.venv_311', '.venv_312']
+    assert sorted([venv.name for venv in venvs]) == ['.venv_310_11', '.venv_311_2', '.venv_312_5']
 
 
 def test_success_deep_2_venv_list_in(resources):
     venvs = utils.venv_list_in(current_path=resources, max_depth=2)
     assert len(venvs) == 4
-    assert sorted([venv.name for venv in venvs]) == ['.venv_310', '.venv_311', '.venv_312', '.venv_39']
+    assert sorted([venv.name for venv in venvs]) == ['.venv_310_11', '.venv_311_2', '.venv_312_5', '.venv_39_11']
 
 
 def test_failure_venv_list_in(resources):
@@ -99,3 +99,80 @@ def test_get_uv_pythons_dict(cmd_out):
             'cpython-3.14.0a6+freethreaded': '<download available>',
             'cpython-3.14.0a6': '<download available>',
         }
+
+
+def test_rename_venv_and_make_symlink_version_detection_fails(tmp_path, config):
+    """Test error case when Python version cannot be detected."""
+    # Change working directory to tmp_path
+    with mock.patch('venvflon.utils.get_command_output') as mock_get_cmd:
+        mock_get_cmd.return_value = (0, 'Invalid output', '')
+
+        result = utils.rename_venv_and_make_symlink(config)
+
+        assert result == 'Error: cannot detect Python version'
+        mock_get_cmd.assert_called_once_with(cmd=[r'.venv\Scripts\python.exe', '-V'])
+
+
+def test_rename_venv_and_make_symlink_success(tmp_path, config):
+    """Test full successful flow with real filesystem operations."""
+    project_dir = tmp_path / 'project'
+    project_dir.mkdir()
+
+    # Create fake .venv structure
+    venv_dir = project_dir / '.venv'
+    venv_dir.mkdir()
+
+    with mock.patch('os.getcwd', return_value=str(project_dir)):
+        with mock.patch('venvflon.utils.get_command_output') as mock_get_cmd:
+            # Simulate Python 3.11 output
+            mock_get_cmd.return_value = (0, '', 'Python 3.11.5')
+
+            result = utils.rename_venv_and_make_symlink(config)
+            assert result == ''
+
+            assert not (project_dir / '.venv').exists()
+            assert (project_dir / '.venv_311_5').exists()
+
+
+def test_rename_venv_and_make_symlink_with_real_symlink(tmp_path, config):
+    """Test with real symlink creation (Windows junction or symlink)."""
+    project_dir = tmp_path / 'project'
+    project_dir.mkdir()
+
+    # Setup fake venv
+    venv_dir = project_dir / '.venv'
+    venv_dir.mkdir()
+    (venv_dir / 'Scripts' / 'python.exe').mkdir(parents=True)
+
+    config.timer = 1.2
+
+    with mock.patch('os.getcwd', return_value=str(project_dir)):
+        with mock.patch('venvflon.utils.get_command_output') as mock_get_cmd:
+            mock_get_cmd.return_value = (0, '', 'Python 3.10.8')
+
+            result = utils.rename_venv_and_make_symlink(config)
+
+            assert result == ''
+
+            # Verify structure
+            assert (project_dir / '.venv_310_8').exists()
+            assert (project_dir / '.venv').exists()  # symlink/junction
+
+            # Verify it's a link
+            venv_link = project_dir / '.venv'
+            assert venv_link.is_symlink() or venv_link.is_junction()  # Windows support
+
+
+def test_rename_venv_and_make_symlink_python_312(tmp_path, config):
+    """Test with Python 3.12 version."""
+    project_dir = tmp_path / 'project'
+    project_dir.mkdir()
+    (project_dir / '.venv' / 'Scripts').mkdir(parents=True)
+
+    with mock.patch('os.getcwd', return_value=str(project_dir)):
+        with mock.patch('venvflon.utils.get_command_output') as mock_get_cmd:
+            mock_get_cmd.return_value = (0, '', 'Python 3.12.0')
+
+            result = utils.rename_venv_and_make_symlink(config)
+            assert result == ''
+            assert (project_dir / '.venv_312_0').exists()
