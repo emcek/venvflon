@@ -240,6 +240,7 @@ def test_make_new_venv_and_symlink_version_detection_fails(tmp_path, config):
     assert result == 'Error: cannot detect Python version'
 
 
+@mark.interactive
 def test_make_new_venv_and_symlink_success(tmp_path, config):
     """Test full successful flow with real filesystem operations."""
     project_dir = tmp_path / 'project'
