@@ -175,9 +175,9 @@ def make_new_venv_and_symlink(uv_py_ver: str, config: Namespace) -> str:
     rm_sym_link(sym_link=sym_link, mode=config.link_mode)
     sleep(config.timer)
     get_command_output(cmd=['uv', 'venv', '--python', uv_py_ver])
-    venv_with_ver = f".venv_{py_ver.group(1)}{py_ver.group(2)}_{py_ver.group(2)}"
+    venv_with_ver = f".venv_{py_ver.group(1)}{py_ver.group(2)}_{py_ver.group(3)}"
     new_venv = Path(os.getcwd()) / venv_with_ver
-    os.rename('.venv', venv_with_ver)
+    os.rename(sym_link, new_venv)
     make_sym_link(to_path=sym_link, target=Path(new_venv), mode=config.link_mode, timer=config.timer)
     return ''
 

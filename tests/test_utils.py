@@ -50,6 +50,27 @@ def test_make_and_remove_sym_link():
     assert not new_sym_link.exists()
 
 
+def test_make_sym_link_python_with_mocks():
+    sym_link = Path(__file__).parent / 'old'
+    new_venv = Path(__file__).parent / 'new'
+    with mock.patch.object(Path, 'symlink_to') as symlink_to_mock:
+        utils.make_sym_link(to_path=sym_link, target=new_venv, mode=utils.LinkMode.PYTHON)
+
+    symlink_to_mock.assert_called_once_with(target=new_venv, target_is_directory=True)
+
+
+@mark.parametrize('mode', [utils.LinkMode.PWSH5, utils.LinkMode.PWSH7])
+def test_make_sym_link_pwsh5_with_mocks(mode, tmp_path):
+    sym_link = Path(__file__).parent / 'old'
+    new_venv = Path(__file__).parent / 'new'
+    cmd_symlink = f'"New-Item -ItemType SymbolicLink -Path \\"{sym_link}\\" -Target \\"{new_venv}\\"'
+    ps_command = f"Start-Process {mode.value} -ArgumentList '-Command {cmd_symlink}' -Verb RunAs"
+
+    with mock.patch.object(utils, 'run_command') as run_command_mock:
+        utils.make_sym_link(to_path=sym_link, target=new_venv, mode=mode)
+
+    run_command_mock.assert_called_once_with(cmd=[mode.value, '-Command', ps_command])
+
 def test_rm_sym_link_python(tmp_path):
     sym_link = tmp_path / 'link'
     sym_link.touch()
@@ -210,3 +231,29 @@ def test_rename_venv_and_make_symlink_python_312(tmp_path, config):
             result = utils.rename_venv_and_make_symlink(config)
             assert result == ''
             assert (project_dir / '.venv_312_0').exists()
+
+
+def test_make_new_venv_and_symlink_version_detection_fails(tmp_path, config):
+    """Test error case when Python version cannot be detected."""
+
+    result = utils.make_new_venv_and_symlink('Wrong Python Version', config)
+    assert result == 'Error: cannot detect Python version'
+
+
+def test_make_new_venv_and_symlink_success(tmp_path, config):
+    """Test full successful flow with real filesystem operations."""
+    project_dir = tmp_path / 'project'
+    project_dir.mkdir()
+
+    config.timer = 1.2
+
+    with mock.patch('os.getcwd', return_value=str(project_dir)):
+        with mock.patch('venvflon.utils.get_command_output') as mock_get_cmd:
+            mock_get_cmd.return_value = (0, '', '')
+            (project_dir / '.venv' / 'Scripts').mkdir(parents=True)
+
+            result = utils.make_new_venv_and_symlink('Python-3.11.5', config)
+            assert result == ''
+
+            assert (project_dir / '.venv_311_5').exists()
+            assert (project_dir / '.venv').exists()
