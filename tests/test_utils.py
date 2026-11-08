@@ -257,3 +257,26 @@ def test_make_new_venv_and_symlink_success(tmp_path, config):
 
             assert (project_dir / '.venv_311_5').exists()
             assert (project_dir / '.venv').exists()
+
+
+def test_get_dirs_with_venvs_success(tmp_path):
+    dir1 = tmp_path / 'dir1'
+    dir2 = tmp_path / 'dir2'
+    dir3 = tmp_path / 'dir3'
+    dir1.mkdir()
+    dir2.mkdir()
+    dir3.mkdir()
+
+    (dir1 / '.venv').mkdir()
+    (dir3 / '.venv').mkdir()
+
+    result = utils.get_dirs_with_venvs(tmp_path)
+    assert len(result) == 2
+
+
+def test_get_dirs_with_venvs_empty(tmp_path):
+    dir2 = tmp_path / 'dir2'
+    dir2.mkdir()
+
+    result = utils.get_dirs_with_venvs(tmp_path)
+    assert len(result) == 0

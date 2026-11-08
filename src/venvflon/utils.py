@@ -199,3 +199,14 @@ def rename_venv_and_make_symlink(config: Namespace) -> str:
     os.rename(sym_link, new_venv)
     make_sym_link(to_path=sym_link, target=Path(new_venv), mode=config.link_mode, timer=config.timer)
     return ''
+
+
+def get_dirs_with_venvs(dir_to_check: Path) -> list[str]:
+    """
+    Get a sorted list of directories that contain virtual environments.
+
+    :param dir_to_check: The directory to check for virtual environments
+    :return: A sorted list of strings
+    """
+    return sorted((str(dir_path) for dir_path in dir_to_check.iterdir() if
+                   dir_path.is_dir() and Path(dir_path, '.venv').exists()), key=str.casefold)
