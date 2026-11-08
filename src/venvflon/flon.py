@@ -41,7 +41,8 @@ class Gui(tk.Frame):
         self.master.rowconfigure(2, weight=1)
         self.frame = tk.Frame(master=self.master, relief=tk.GROOVE, borderwidth=2)
         self.status = tk.Label(master=self.master, textvariable=self.status_txt, font=('Arial', 9, 'italic'))
-        self.cwd = tk.Entry(master=self.master, textvariable=self.cwd_entry, width=20, relief=tk.SUNKEN, font=('Arial', 9))
+        list_dirs_with_venvs = utils.get_dirs_with_venvs(dir_to_check=Path(getcwd()))
+        self.cwd = ttk.Combobox(master=self.master, textvariable=self.cwd_entry, values=list_dirs_with_venvs)
         self.btn_sync = tk.Button(master=self.master, text='Sync', command=self.sync, font=('Arial', 9))
         self.btn_create = tk.Button(master=self.master, text='Create venv', command=self.create, font=('Arial', 9))
         self.btn_uv_upd = tk.Button(master=self.master, text='Update UV', command=self.uv_update, font=('Arial', 9))
@@ -105,13 +106,18 @@ class Gui(tk.Frame):
         if sym_link.exists() and sym_link.resolve().name in venv_path:
             self.venv.set(venv_path)
 
-    def refresh_cwd(self, *args: tk.Event[tk.Entry]) -> None:
+    def refresh_cwd(self, *args: tk.Event[ttk.Combobox]) -> None:
         """
         Refresh the current working directory.
 
         :param args: Internal tkinter arguments
         """
         new_cwd = Path(self.cwd_entry.get())
+        if not new_cwd.is_dir():
+            self.status_txt.set(f"Directory does not exist: {new_cwd}")
+            self.venv_list = []
+            self.add_venvs()
+            return
         self.cwd.configure(width=len(str(new_cwd)))
         chdir(new_cwd)
         self.master.title(f'venvflon - {new_cwd.name}')
