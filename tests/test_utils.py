@@ -113,6 +113,7 @@ def test_rename_venv_and_make_symlink_version_detection_fails(tmp_path, config):
         mock_get_cmd.assert_called_once_with(cmd=[r'.venv\Scripts\python.exe', '-V'])
 
 
+@mark.interactive
 def test_rename_venv_and_make_symlink_success(tmp_path, config):
     """Test full successful flow with real filesystem operations."""
     project_dir = tmp_path / 'project'
@@ -134,6 +135,7 @@ def test_rename_venv_and_make_symlink_success(tmp_path, config):
             assert not (project_dir / '.venv').exists()
 
 
+@mark.interactive
 def test_rename_venv_and_make_symlink_with_real_symlink(tmp_path, config):
     """Test with real symlink creation (Windows junction or symlink)."""
     project_dir = tmp_path / 'project'
@@ -163,6 +165,7 @@ def test_rename_venv_and_make_symlink_with_real_symlink(tmp_path, config):
             assert venv_link.is_symlink() or venv_link.is_junction()  # Windows support
 
 
+@mark.interactive
 def test_rename_venv_and_make_symlink_python_312(tmp_path, config):
     """Test with Python 3.12 version."""
     project_dir = tmp_path / 'project'
