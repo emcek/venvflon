@@ -50,6 +50,37 @@ def test_make_and_remove_sym_link():
     assert not new_sym_link.exists()
 
 
+def test_rm_sym_link_python(tmp_path):
+    sym_link = tmp_path / 'link'
+    sym_link.touch()
+
+    with mock.patch.object(Path, 'unlink') as unlink_mock:
+        utils.rm_sym_link(sym_link=sym_link, mode=utils.LinkMode.PYTHON)
+
+    unlink_mock.assert_called_once_with(missing_ok=True)
+
+
+def test_rm_sym_link_missing_path(tmp_path):
+    sym_link = tmp_path / 'missing'
+
+    with mock.patch.object(utils, 'run_command') as run_command_mock:
+        utils.rm_sym_link(sym_link=sym_link, mode=utils.LinkMode.PYTHON)
+
+    run_command_mock.assert_not_called()
+
+
+@mark.parametrize('mode', [utils.LinkMode.PWSH5, utils.LinkMode.PWSH7])
+def test_rm_sym_link_powershell(tmp_path, mode):
+    sym_link = tmp_path / 'link'
+    sym_link.touch()
+    ps_command = f'Start-Process {mode.value} -ArgumentList "-Command (Get-Item \'{sym_link}\').Delete()" -Verb RunAs'
+
+    with mock.patch.object(utils, 'run_command') as run_command_mock:
+        utils.rm_sym_link(sym_link=sym_link, mode=mode)
+
+    run_command_mock.assert_called_once_with(cmd=[mode.value, '-Command', ps_command])
+
+
 def test_success_deep_1_venv_list_in(resources):
     venvs = utils.venv_list_in(current_path=resources, max_depth=1)
     assert len(venvs) == 3
