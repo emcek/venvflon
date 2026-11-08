@@ -11,7 +11,7 @@ from tkinterdnd2 import DND_FILES, TkinterDnD
 
 from venvflon import utils
 
-__version__ = '0.9.3'
+__version__ = '1.0.0'
 KEYWORDS = ('Resolved', 'Installed', 'Audited', 'Prepared', 'Uninstalled')
 LATEST_PYTHON = '3.15'
 
