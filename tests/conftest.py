@@ -21,8 +21,8 @@ def resources():
 def config():
     """Default test config."""
     if platform == 'win32':
-        return Namespace(link_mode=utils.LinkMode.PWSH5, timer=False)
+        return Namespace(link_mode=utils.LinkMode.PWSH5, timer=1.2)
     elif platform == 'linux':
-        return Namespace(link_mode=utils.LinkMode.PYTHON, timer=False)
+        return Namespace(link_mode=utils.LinkMode.PYTHON, timer=1.2)
     else:
-        return Namespace(link_mode=utils.LinkMode.PWSH7, timer=False)
+        return Namespace(link_mode=utils.LinkMode.PWSH7, timer=1.2)

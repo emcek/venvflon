@@ -130,8 +130,8 @@ def test_rename_venv_and_make_symlink_success(tmp_path, config):
             result = utils.rename_venv_and_make_symlink(config)
             assert result == ''
 
-            assert not (project_dir / '.venv').exists()
             assert (project_dir / '.venv_311_5').exists()
+            assert not (project_dir / '.venv').exists()
 
 
 def test_rename_venv_and_make_symlink_with_real_symlink(tmp_path, config):
