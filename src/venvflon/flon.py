@@ -114,9 +114,9 @@ class Gui(tk.Frame):
         """
         new_cwd = Path(self.cwd_entry.get())
         if not new_cwd.is_dir():
-            self.status_txt.set(f"Directory does not exist: {new_cwd}")
             self.venv_list = []
             self.add_venvs()
+            self.status_txt.set(f"Directory does not exist: {new_cwd}")
             return
         self.cwd.configure(width=len(str(new_cwd)))
         chdir(new_cwd)
