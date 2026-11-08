@@ -54,8 +54,8 @@ test = [
     'packaging',
     'pip-audit',
     'pytest',
-    'pytest-randomly',
     'pytest-cov',
+    'pytest-randomly',
     'ruff',
     'types-pyyaml',
 ]
