@@ -2,8 +2,6 @@
 * Replace the working-directory entry with an editable combobox that suggests subdirectories and validates custom paths
 * Refactor virtual environment creation and symbolic-link handling
 * Expand tests and CI coverage for virtual environment and symbolic-link operations
-
-## 0.9.3
 * Update tkinterdnd2 to 0.7.0
 * Add support for Python 3.15
 * remove python 3.10 from list of supported versions
