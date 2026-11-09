@@ -6,13 +6,11 @@ from os import chdir, getcwd
 from pathlib import Path
 from tkinter import ttk
 
-import yaml
 from tkinterdnd2 import DND_FILES, TkinterDnD
 
 from venvflon import utils
 
 __version__ = '1.0.0'
-KEYWORDS = ('Resolved', 'Installed', 'Audited', 'Prepared', 'Uninstalled')
 LATEST_PYTHON = '3.15'
 
 
@@ -138,25 +136,13 @@ class Gui(tk.Frame):
     def sync(self) -> None:
         """Run sync command from configuration YAML."""
         self.btn_sync.configure(text='Syncing...')
-        with open(file='.venvflon.yaml', encoding='utf-8') as yaml_file:
-            data = yaml.load(yaml_file, Loader=yaml.SafeLoader)
-        all_out = []
-        for cmd in data['sync_cmd']:
-            _, err, _ = utils.get_command_output(cmd=cmd.split(' '))
-            parsed_lines = [line for line in err.split('\n') if any(keyword in line for keyword in KEYWORDS)]
-            all_out.extend(parsed_lines)
-        time_ms = sum(utils.extract_time(entry=entry) for entry in all_out)
-        packages = utils.extract_installed_packages(entry=all_out)
-        total_time = f'{time_ms / 1000:.2f} s' if time_ms > 1000 else f'{time_ms:.2f} ms'
-        desc = f'Installed {packages} in {total_time}' if packages else f'Sync in {total_time}'
+        desc = utils.sync_venv()
         self.btn_sync.configure(text=desc)
 
     def venv_selected(self) -> None:
         """Set the selected venv as the active one."""
         new_venv = self.venv.get()
-        sym_link = Path(getcwd()) / '.venv'
-        utils.rm_sym_link(sym_link=sym_link, mode=self.config.link_mode)
-        utils.make_sym_link(to_path=sym_link, target=Path(new_venv), mode=self.config.link_mode, timer=self.config.timer)
+        utils.select_venv(new_venv, self.config)
         self.update_status()
 
     def update_status(self) -> None:

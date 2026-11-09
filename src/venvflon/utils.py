@@ -9,6 +9,8 @@ from re import match, search
 from subprocess import CalledProcessError, run
 from time import sleep
 
+import yaml
+
 
 class LinkMode(Enum):
     """Mode to create symbolic link."""
@@ -18,6 +20,7 @@ class LinkMode(Enum):
 
 
 LINK_MODE_MAP = {0: LinkMode.PYTHON, 5: LinkMode.PWSH5, 7: LinkMode.PWSH7}
+KEYWORDS = ('Resolved', 'Installed', 'Audited', 'Prepared', 'Uninstalled')
 
 
 def run_command(cmd: Sequence[str], cwd: Path | None = None) -> int:
@@ -210,3 +213,35 @@ def get_dirs_with_venvs(dir_to_check: Path) -> list[str]:
     """
     return sorted((str(dir_path) for dir_path in dir_to_check.iterdir() if
                    dir_path.is_dir() and Path(dir_path, '.venv').exists()), key=str.casefold)
+
+
+def sync_venv() -> str:
+    """
+    Run sync command from configuration YAML.
+
+    :return: A description of the sync operation, including the number of installed packages and the total time taken.
+    """
+    with open(file='.venvflon.yaml', encoding='utf-8') as yaml_file:
+        data = yaml.load(yaml_file, Loader=yaml.SafeLoader)
+    all_out = []
+    for cmd in data['sync_cmd']:
+        _, err, _ = get_command_output(cmd=cmd.split(' '))
+        parsed_lines = [line for line in err.split('\n') if any(keyword in line for keyword in KEYWORDS)]
+        all_out.extend(parsed_lines)
+    time_ms = sum(extract_time(entry=entry) for entry in all_out)
+    packages = extract_installed_packages(entry=all_out)
+    total_time = f'{time_ms / 1000:.2f} s' if time_ms > 1000 else f'{time_ms:.2f} ms'
+    desc = f'Installed {packages} in {total_time}' if packages else f'Sync in {total_time}'
+    return desc
+
+
+def select_venv(new_venv: str, config: Namespace) -> None:
+    """
+    Select a new virtual environment and create a symbolic link to it.
+
+    :param new_venv: The path to the new virtual environment to be selected
+    :param config: Config object
+    """
+    sym_link = Path(os.getcwd()) / '.venv'
+    rm_sym_link(sym_link=sym_link, mode=config.link_mode)
+    make_sym_link(to_path=sym_link, target=Path(new_venv), mode=config.link_mode, timer=config.timer)
