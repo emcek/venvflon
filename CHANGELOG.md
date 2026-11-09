@@ -1,3 +1,6 @@
+## 1.1.0
+* Add tooltip to sync buton with list installed packages
+
 ## 1.0.0
 * Replace the working-directory entry with an editable combobox that suggests subdirectories and validates custom paths
 * Refactor virtual environment creation and symbolic-link handling
