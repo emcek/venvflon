@@ -15,6 +15,8 @@ LATEST_PYTHON = '3.15'
 
 
 class ToolTip:
+    """Tooltip for a tkinter widget."""
+
     def __init__(self, widget, text):
         """
         Initialize the tooltip.
