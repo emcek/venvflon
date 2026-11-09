@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 from argparse import Namespace
 from collections.abc import Sequence
-from enum import Enum
+from enum import Enum, StrEnum, auto
 from pathlib import Path
 from re import match, search
 from subprocess import CalledProcessError, run
@@ -17,6 +17,13 @@ class LinkMode(Enum):
     PYTHON = 'python.exe'
     PWSH5 = 'powershell.exe'
     PWSH7 = 'pwsh.exe'
+
+
+class TextAlign(StrEnum):
+    """Text alignment."""
+    LEFT = auto()
+    RIGHT = auto()
+    CENTER = auto()
 
 
 LINK_MODE_MAP = {0: LinkMode.PYTHON, 5: LinkMode.PWSH5, 7: LinkMode.PWSH7}
@@ -215,24 +222,26 @@ def get_dirs_with_venvs(dir_to_check: Path) -> list[str]:
                    dir_path.is_dir() and Path(dir_path, '.venv').exists()), key=str.casefold)
 
 
-def sync_venv() -> str:
+def sync_venv() -> tuple[str, str]:
     """
     Run sync command from configuration YAML.
 
-    :return: A description of the sync operation, including the number of installed packages and the total time taken.
+    :return: A tuple containing a description of the sync operation and tool tips.
     """
     with open(file='.venvflon.yaml', encoding='utf-8') as yaml_file:
         data = yaml.load(yaml_file, Loader=yaml.SafeLoader)
     all_out = []
+    tool_tips = ''
     for cmd in data['sync_cmd']:
         _, err, _ = get_command_output(cmd=cmd.split(' '))
         parsed_lines = [line for line in err.split('\n') if any(keyword in line for keyword in KEYWORDS)]
+        start = err.find('Installed ')
+        tool_tips += err[start:] if start != -1 else ''
         all_out.extend(parsed_lines)
     time_ms = sum(extract_time(entry=entry) for entry in all_out)
-    packages = extract_installed_packages(entry=all_out)
     total_time = f'{time_ms / 1000:.2f} s' if time_ms > 1000 else f'{time_ms:.2f} ms'
-    desc = f'Installed {packages} in {total_time}' if packages else f'Sync in {total_time}'
-    return desc
+    desc = f'Sync in {total_time}'
+    return desc, tool_tips
 
 
 def select_venv(new_venv: str, config: Namespace) -> None:

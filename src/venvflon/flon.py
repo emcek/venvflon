@@ -14,6 +14,68 @@ __version__ = '1.0.0'
 LATEST_PYTHON = '3.15'
 
 
+class ToolTip:
+    def __init__(self, widget, text):
+        """
+        Initialize the tooltip.
+
+        :param widget: The widget to attach the tooltip to.
+        :param text: The text to display in the tooltip.
+        """
+        self.widget = widget
+        self.text = text
+        self.align = utils.TextAlign.LEFT
+        self.tooltip = None
+        self.label = None
+
+        widget.bind('<Enter>', self.show)
+        widget.bind('<Leave>', self.hide)
+
+    def show(self, event=None):
+        """
+        Show the tooltip.
+
+        :param event: Internal tkinter arguments
+        """
+        if not self.text or self.tooltip:
+            return
+
+        x = self.widget.winfo_rootx()
+        y = self.widget.winfo_rooty() + self.widget.winfo_height()
+
+        self.tooltip = tk.Toplevel(self.widget)
+        self.tooltip.wm_overrideredirect(True)
+        self.tooltip.wm_geometry(f"+{x}+{y}")
+
+        self.label = tk.Label(self.tooltip, text=self.text, font=('Courier New', 8), background='lightyellow',
+                              relief='solid', borderwidth=1, justify=self.align.value, padx=5, pady=3)
+        self.label.pack()
+
+    def hide(self, event=None):
+        """
+        Hide the tooltip.
+
+        :param event: Internal tkinter arguments
+        """
+        if self.tooltip:
+            self.tooltip.destroy()
+            self.tooltip = None
+            self.label = None
+
+    def update_text(self, new_text, align: utils.TextAlign = utils.TextAlign.LEFT):
+        """
+        Update the tooltip text and alignment.
+
+        :param new_text: The new text for the tooltip
+        :param align: Text alignment
+        """
+        self.text = new_text
+        self.align = align
+
+        if self.label:
+            self.label.config(text=new_text, justify=align.value)
+
+
 class Gui(tk.Frame):
     """Tkinter GUI for venvflon."""
 
@@ -69,6 +131,7 @@ class Gui(tk.Frame):
         combo_label.grid(row=4, column=0, sticky=tk.W, padx=5, pady=5)
         self.combo_py_ver.grid(row=4, column=1, columnspan=3, sticky=tk.EW, padx=5, pady=5)
         self.btn_sync.grid(row=5, column=1, sticky=tk.EW, padx=5, pady=5)
+        self.sync_tooltip = ToolTip(self.btn_sync, text='')
         self.btn_create.grid(row=5, column=2, sticky=tk.EW, padx=5, pady=5)
         self.btn_uv_upd.grid(row=5, column=3, sticky=tk.EW, padx=5, pady=5)
         self.sync_btn_state()
@@ -136,7 +199,10 @@ class Gui(tk.Frame):
     def sync(self) -> None:
         """Run sync command from configuration YAML."""
         self.btn_sync.configure(text='Syncing...')
-        desc = utils.sync_venv()
+        desc, tooltip = utils.sync_venv()
+        if not tooltip:
+            tooltip = 'No packages were installed or updated.'
+        self.sync_tooltip.update_text(tooltip)
         self.btn_sync.configure(text=desc)
 
     def venv_selected(self) -> None:
