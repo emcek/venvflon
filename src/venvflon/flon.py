@@ -187,6 +187,8 @@ class Gui(tk.Frame):
         self.venv_list = utils.venv_list_in(current_path=new_cwd)
         self.add_venvs()
         self.sync_btn_state()
+        self.sync_tooltip.update_text('')
+        self.btn_sync.configure(text='Sync')
 
     def drop_in_cwd(self, event: TkinterDnD.DnDEvent) -> None:
         """
@@ -212,6 +214,8 @@ class Gui(tk.Frame):
         new_venv = self.venv.get()
         utils.select_venv(new_venv, self.config)
         self.update_status()
+        self.sync_tooltip.update_text('')
+        self.btn_sync.configure(text='Sync')
 
     def update_status(self) -> None:
         """Update the status text."""
