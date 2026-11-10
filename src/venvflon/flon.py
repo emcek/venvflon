@@ -124,6 +124,7 @@ class Gui(tk.Frame):
         cwd_label.grid(row=0, column=0, sticky=tk.W, padx=5, pady=5)
         self.cwd.grid(row=0, column=1, columnspan=3, sticky=tk.EW, padx=5, pady=5)
         self.cwd.bind('<Return>', self.refresh_cwd)
+        self.cwd.bind('<<ComboboxSelected>>', self.refresh_cwd)
         self.cwd.dnd_bind('<<Drop>>', self.drop_in_cwd)  # type: ignore[attr-defined]
         loc_lable = tk.Label(self.master, text='location:', font=('Arial', 9))
         loc_lable.grid(row=3, column=0, sticky=tk.W, padx=5, pady=5)
