@@ -12,3 +12,11 @@ jobs:
   test:
     needs: [style]
     uses: ./.github/workflows/test.yml
+
+  license:
+    needs: [ style ]
+    uses: ./.github/workflows/license.yml
+
+  coverage:
+    needs: [ style ]
+    uses: ./.github/workflows/coverage.yml

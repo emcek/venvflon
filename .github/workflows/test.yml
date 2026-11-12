@@ -28,15 +28,6 @@ jobs:
         run: |
           python -m pytest -v -m "not interactive"
 
-      - name: "Upload test results"
-        uses: actions/upload-artifact@v7
-        if: always()
-        with:
-          name: pytest-${{ matrix.os }}-${{ matrix.python-version }}
-          path: |
-            tests/resources/*
-          retention-days: 5
-
       - name: "Check pip-audit"
         run: |
           pip-audit -lv --progress-spinner off

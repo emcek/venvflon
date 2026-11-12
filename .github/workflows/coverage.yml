@@ -1,0 +1,28 @@
+name: Coverage
+
+on: workflow_call
+
+jobs:
+  coverage:
+    name: windows-2025 py3.15
+    runs-on: windows-2025
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v7
+
+      - name: "Set up Python environment"
+        uses: ./.github/actions/setup-python
+
+      - name: "Test with pytest"
+        run: |
+          python -m pytest -v -m 'not interactive' --disable-warnings --cov=venvflon --cov-report=xml --cov-report=html --cov-report=term-missing
+
+      - name: "Upload pytest results"
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: coverage_3_15
+          path: |
+            covhtml/*
+            coverage.xml
+          retention-days: 4
