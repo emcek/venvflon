@@ -10,7 +10,7 @@ from tkinterdnd2 import DND_FILES, TkinterDnD
 
 from venvflon import utils
 
-__version__ = '1.1.0'
+__version__ = '1.1.1'
 LATEST_PYTHON = '3.15'
 
 
