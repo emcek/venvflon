@@ -1,3 +1,7 @@
+## 1.1.1
+* Improved virtualenv directory refresh by binding refresh_cwd to the selected value in the Combobox.
+* Reset the sync button text and tooltip when the venv state changes, so stale UI status is cleared.
+
 ## 1.1.0
 * Add tooltip to sync buton with list installed packages
 
