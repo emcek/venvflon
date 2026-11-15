@@ -1,6 +1,6 @@
 ## 1.1.2
 * Scanning for directories with virtual environments.
- 
+
 ## 1.1.1
 * Improved virtualenv directory refresh by binding refresh_cwd to the selected value in the Combobox.
 * Reset the sync button text and tooltip when the venv state changes, so stale UI status is cleared.
