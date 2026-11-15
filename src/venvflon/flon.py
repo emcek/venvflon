@@ -105,6 +105,7 @@ class Gui(tk.Frame):
         self.status = tk.Label(master=self.master, textvariable=self.status_txt, font=('Arial', 9, 'italic'))
         list_dirs_with_venvs = utils.get_dirs_with_venvs(dir_to_check=Path(getcwd()))
         self.cwd = ttk.Combobox(master=self.master, textvariable=self.cwd_entry, values=list_dirs_with_venvs)
+        self.btn_scan = tk.Button(master=self.master, text='Scan', command=self.scan, font=('Arial', 9))
         self.btn_sync = tk.Button(master=self.master, text='Sync', command=self.sync, font=('Arial', 9))
         self.btn_create = tk.Button(master=self.master, text='Create venv', command=self.create, font=('Arial', 9))
         self.btn_uv_upd = tk.Button(master=self.master, text='Update UV', command=self.uv_update, font=('Arial', 9))
@@ -122,10 +123,11 @@ class Gui(tk.Frame):
         self.cwd.drop_target_register(DND_FILES)  # type: ignore[attr-defined]
         cwd_label = tk.Label(self.master, text='cwd:', font=('Arial', 9))
         cwd_label.grid(row=0, column=0, sticky=tk.W, padx=5, pady=5)
-        self.cwd.grid(row=0, column=1, columnspan=3, sticky=tk.EW, padx=5, pady=5)
+        self.cwd.grid(row=0, column=1, columnspan=2, sticky=tk.EW, padx=5, pady=5)
         self.cwd.bind('<Return>', self.refresh_cwd)
         self.cwd.bind('<<ComboboxSelected>>', self.refresh_cwd)
         self.cwd.dnd_bind('<<Drop>>', self.drop_in_cwd)  # type: ignore[attr-defined]
+        self.btn_scan.grid(row=0, column=3, sticky=tk.EW, padx=5, pady=5)
         loc_lable = tk.Label(self.master, text='location:', font=('Arial', 9))
         loc_lable.grid(row=3, column=0, sticky=tk.W, padx=5, pady=5)
         self.pyloc_lable = tk.Label(self.master, text=py_location, font=('Arial', 9), anchor=tk.W, justify=tk.LEFT)
@@ -209,6 +211,11 @@ class Gui(tk.Frame):
             tooltip = 'No packages were installed or updated.'
         self.sync_tooltip.update_text(tooltip)
         self.btn_sync.configure(text=desc)
+
+    def scan(self) -> None:
+        """Scan for directories with virtual environments."""
+        list_dirs_with_venvs = utils.get_dirs_with_venvs(dir_to_check=Path(getcwd()))
+        self.cwd.configure(values=list_dirs_with_venvs)
 
     def venv_selected(self) -> None:
         """Set the selected venv as the active one."""
